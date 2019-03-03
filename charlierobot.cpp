@@ -93,6 +93,7 @@ newrace(int index, tCarElt* car, tSituation *s)
 static void  
 drive(int index, tCarElt* car, tSituation *s) 
 { 
+    //default borderline code
     /* memset((void *)&car->ctrl, 0, sizeof(tCarCtrl)); */ 
     /* car->ctrl.brakeCmd = 1.0; /1* all brakes on ... *1/ */ 
     /*  
@@ -103,6 +104,8 @@ drive(int index, tCarElt* car, tSituation *s)
     * car->_gearCmd 
     * car->_clutchCmd 
     */ 
+
+    //basic code to steer car around track
     memset(&car->ctrl, 0, sizeof(tCarCtrl));
 
     float angle;
