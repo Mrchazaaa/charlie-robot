@@ -24,6 +24,8 @@
 #include <string.h> 
 #include <math.h>
 
+#include <iostream>
+
 #include <tgf.h> 
 #include <track.h> 
 #include <car.h> 
@@ -105,8 +107,22 @@ drive(int index, tCarElt* car, tSituation *s)
     * car->_clutchCmd 
     */ 
 
+
+
     //basic code to steer car around track
     memset(&car->ctrl, 0, sizeof(tCarCtrl));
+
+    tdble wheel1 = *(&car->priv.wheel[0].spinVel);
+    tdble wheel2 = *(&car->priv.wheel[1].spinVel);
+    tdble wheel3 = *(&car->priv.wheel[2].spinVel);
+    tdble wheel4 = *(&car->priv.wheel[3].spinVel);
+
+    system ("clear");
+
+    std::cout << "wheel1 speed is: " << wheel1 << std::endl;
+    std::cout << "wheel2 speed is: " << wheel2 << std::endl;
+    std::cout << "wheel3 speed is: " << wheel3 << std::endl;
+    std::cout << "wheel4 speed is: " << wheel4 << std::endl;
 
     float angle;
     const float SC = 1.0;
@@ -116,8 +132,8 @@ drive(int index, tCarElt* car, tSituation *s)
 
     // set up the values to return
     car->ctrl.steer = angle / car->_steerLock;
-    car->ctrl.gear = 1; // first gear
-    car->ctrl.accelCmd = 0.3; // 30% accelerator pedal
+    car->ctrl.gear = 4; // first gear
+    car->ctrl.accelCmd = 0.5; // 30% accelerator pedal
     car->ctrl.brakeCmd = 0.0; // no brakes
 }
 
