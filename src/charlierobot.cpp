@@ -96,8 +96,6 @@ static void setRobotName(const string name) {
 extern "C" int moduleWelcome(const tModWelcomeIn* welcomeIn,
                               tModWelcomeOut* welcomeOut) {
 
-  GfOut("1hello world ");
-
   // Save module name and loadDir, and determine module XML file pathname.
   setRobotName(welcomeIn->name);
 
@@ -161,8 +159,6 @@ extern "C" int moduleWelcome(const tModWelcomeIn* welcomeIn,
 // Module entry point (new fixed name scheme).
 extern "C" int moduleInitialize(tModInfo *modInfo) {
 
-    GfOut("3hello world ");
-
   // Clear all structures.
   memset(modInfo, 0, NBBOTS * sizeof(tModInfo));
   for (int i = 0; i < NBBOTS; i++) {
@@ -198,8 +194,6 @@ extern "C" int moduleTerminate() {
 // Module entry point
 extern "C" int charlierobot(tModInfo *modInfo) {
 
-  GfOut("2hello world ");
-
   NBBOTS = 1;
   Drivers.clear();
   pathBuffer = "drivers/charlierobot/charlierobot.xml";
@@ -231,7 +225,6 @@ extern "C" int charlierobotShut() {
 
 // Module interface initialization.
 static int InitFuncPt(int index, void *pt) {
-  GfOut("yo loser");
 
   tRobotItf *itf = static_cast<tRobotItf *>(pt);
 

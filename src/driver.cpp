@@ -237,28 +237,55 @@ void TDriver::NewRace(PtCarElt Car, PSituation Situation)
 
 void TDriver::Drive()
 {
-#ifdef TIME_ANALYSIS
-  struct timeval tv;
-  gettimeofday(&tv, NULL);
-  double usec1 = tv.tv_usec;
-#endif
-  updateTime();
-  updateTimer();
-  updateBasics();
-  updateOpponents();
-  updatePath();
-  updateUtils();
-  calcDrvState();
-  calcTarget();
-  calcMaxspeed();
-  setControls();
-  printChangedVars();
-  setPrevVars();
-#ifdef TIME_ANALYSIS
-  gettimeofday(&tv, NULL);
-  double usec2 = tv.tv_usec;
-  driverMsgValue(0, "useconds", usec2 - usec1);
-#endif
+//#ifdef TIME_ANALYSIS
+//  struct timeval tv;
+//  gettimeofday(&tv, NULL);
+//  double usec1 = tv.tv_usec;
+//#endif
+//  updateTime();
+//  updateTimer();
+//  updateBasics();
+//  updateOpponents();
+//  updatePath();
+//  updateUtils();
+//  calcDrvState();
+//  calcTarget();
+//  calcMaxspeed();
+//  setControls();
+//  printChangedVars();
+//  setPrevVars();
+//#ifdef TIME_ANALYSIS
+//  gettimeofday(&tv, NULL);
+//  double usec2 = tv.tv_usec;
+//  driverMsgValue(0, "useconds", usec2 - usec1);
+//#endif
+
+  //===========basic TORCS driver code==============
+
+  //memset(&car->ctrl, 0, sizeof(tCarCtrl));
+
+  float angle;
+  const float SC = 1.0;
+
+  angle = RtTrackSideTgAngleL(&(oCar->_trkPos)) - oCar->_yaw;
+  NORM_PI_PI(angle); // put the angle back in the range from -PI to PI
+  angle -= SC*oCar->_trkPos.toMiddle/oCar->_trkPos.seg->width;
+
+  // set up the values to return
+  oCar->_steerCmd = (tdble)(angle / oCar->_steerLock);
+  //oCar->_gearCmd = (tdble)3; // first gear
+  //oCar->_accelCmd = (tdble)0.8; // 30% accelerator pedal
+  //oCar->_brakeCmd = (tdble)0.0; // no brakes
+  
+  //oCar->_steerCmd = (tdble) getSteer();
+  oCar->_gearCmd = getGear();
+  oCar->_clutchCmd = (tdble) getClutch();  // must be after gear
+  oCar->_brakeCmd = (tdble)0.0;// /*filterABS(*/getBrake(mMaxspeed)/*)*/;
+  mAccel = /*filterTCLSideSlip(filterTCL(*/getAccel(mMaxspeed)/*))*/;  // must be after brake
+  oCar->_accelCmd = (tdble) 0.8;
+  oCar->_lightCmd = RM_LIGHT_HEAD1 | RM_LIGHT_HEAD2;
+
+  //===========basic TORCS driver code==============
 }
 
 
