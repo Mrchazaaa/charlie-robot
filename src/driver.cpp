@@ -243,8 +243,8 @@ void TDriver::Drive()
 //  gettimeofday(&tv, NULL);
 //  double usec1 = tv.tv_usec;
 //#endif
-  updateTime();
-  updateTimer();
+//  updateTime();
+//  updateTimer();
 //  updateBasics();
 //  updateOpponents();
 //  updatePath();
@@ -261,10 +261,7 @@ void TDriver::Drive()
 //  driverMsgValue(0, "useconds", usec2 - usec1);
 //#endif
 
-  //===========basic TORCS driver code==============
-
-  //memset(&car->ctrl, 0, sizeof(tCarCtrl));
-
+  //UPDATE STEERING  
   float angle;
   const float SC = 1.0;
 
@@ -272,44 +269,30 @@ void TDriver::Drive()
   NORM_PI_PI(angle); // put the angle back in the range from -PI to PI
   angle -= SC*oCar->_trkPos.toMiddle/oCar->_trkPos.seg->width;
 
-  // set up the values to return
   oCar->_steerCmd = (tdble)(angle / oCar->_steerLock);
-  //oCar->_gearCmd = (tdble)3; // first gear
-  //oCar->_accelCmd = (tdble)0.8; // 30% accelerator pedal
-  //oCar->_brakeCmd = (tdble)0.0; // no brakes
-  
-  //oCar->_steerCmd = (tdble) getSteer();
+  //UPDATE STEERING 
+
+  //UPDATE GEARS/CLUTCH 
+  updateTimer();
   oCar->_gearCmd = getGear();
   oCar->_clutchCmd = (tdble) getClutch();  // must be after gear
-  //oCar->_gearCmd = (tdble)3.0;
-  //oCar->_clutchCmd = (tdble) getClutch();  // must be after gear
-  oCar->_clutchCmd = (tdble)0.0;
-  oCar->_brakeCmd = (tdble)0.0;// /*filterABS(*/getBrake(mMaxspeed)/*)*/;
-  //mAccel = /*filterTCLSideSlip(filterTCL(*/getAccel(mMaxspeed)/*))*/;  // must be after brake
-  
-  //CONTROL SPEED STUFF
-  double targetspeedmph = 180.0;
-  double targetspeed = targetspeedmph/3.6;
-  mSpeed = oCar->_speed_x;
-  //mSpeed = oCar->pub.speed;
+  //UPDATE GEARS/CLUTCH
+
+  //CONTROL SPEED 
+  double targetspeedkph = 180.0;
+  double targetspeed = targetspeedkph/3.6;
   controlSpeed(mAccel, targetspeed);
-  //CONTROL SPEED STUFF
-
-  oCar->_accelCmd = (tdble)filterTCLSideSlip(filterTCL(mAccel)); //(tdble) 0.8;
-  oCar->_lightCmd = RM_LIGHT_HEAD1 | RM_LIGHT_HEAD2;
-
+  mSpeed = oCar->_speed_x;
+  oCar->_accelCmd = (tdble)/*filterTCLSideSlip(filterTCL(*/mAccel/*))*/; //(tdble) 0.8;
   oCar->_brakeCmd = (tdble)0.0; //filterABS(getBrake(targetspeed));
+  //CONTROL SPEED 
 
+  //PRINT DEBUG INFO
   std::system("clear;");
-  std::cout << "current accel is: " << mAccel << std::endl;
-  //std::cout << "current mSpeed is: " << mSpeed(double) << std::endl;
-  std::cout << "current _speed_X is: " << oCar->_speed_X << std::endl;
-  std::cout << "current _speed_Y is: " << oCar->_speed_Y << std::endl;
   std::cout << "current _speed_x is " << oCar->_speed_x << std::endl;
-  std::cout << "current speed mph is " << oCar->_speed_x * 3.6 << std::endl;
-  
-
-  //===========basic TORCS driver code==============
+  std::cout << "current speed kph is " << oCar->_speed_x * 3.6 << std::endl;
+  std::cout << "current gear is " << oCar->_gear << std::endl;
+  //PRINT DEBUG INFO
 }
 
 
