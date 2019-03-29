@@ -208,6 +208,10 @@ void TDriver::NewRace(PtCarElt Car, PSituation Situation)
   oCar = Car;
   oSituation = Situation;
   readVarSpecs(oCar->_carHandle);
+  //CHARLIE CODE :) CHARLIE CODE
+  //std::cout << "XXXXXXX " << oCar->_carHandle << std::endl;
+  //oCar-> _singleWheelBrakeMode = 1;
+  //CHARLIE CODE :) CHARLIE CODE
   initCa(oCar->_carHandle);
   initCw(oCar->_carHandle);
   initBrakes();
@@ -279,19 +283,52 @@ void TDriver::Drive()
   //UPDATE GEARS/CLUTCH
 
   //CONTROL SPEED 
-  double targetspeedkph = 180.0;
+  double targetspeedkph = 48.0;
   double targetspeed = targetspeedkph/3.6;
   controlSpeed(mAccel, targetspeed);
   mSpeed = oCar->_speed_x;
-  oCar->_accelCmd = (tdble)/*filterTCLSideSlip(filterTCL(*/mAccel/*))*/; //(tdble) 0.8;
-  oCar->_brakeCmd = (tdble)0.0; //filterABS(getBrake(targetspeed));
+
+  oCar->ctrl.singleWheelBrakeMode = 1;
+  oCar->_brakeRRCmd = (tdble)0.0;
+  oCar->_brakeFRCmd = (tdble)0.0;
+  oCar->_brakeFRCmd = (tdble)0.0;
+  oCar->_brakeFRCmd = (tdble)0.0;
+
+  oCar->_accelCmd = (tdble)mAccel; //(tdble) 0.8;
+  oCar->_brakeCmd = (tdble)0.0; 
+
+  //oCar->_brakeCmd = (tdble)filterABS(getBrake(targetspeed));
+  //oCar->_accelCmd = (tdble)filterTCLSideSlip(filterTCL(mAccel));;
+  
   //CONTROL SPEED 
+
+  //MISC
+  //oCar->_brakeCmd = (tdble) filterABS(getBrake(mMaxspeed));
+  //oCar->_accelCmd = (tdble) filterTCLSideSlip(filterTCL(getAccel(mMaxspeed)));  // must be after brake;
+  //MISC
 
   //PRINT DEBUG INFO
   std::system("clear;");
-  std::cout << "current _speed_x is " << oCar->_speed_x << std::endl;
-  std::cout << "current speed kph is " << oCar->_speed_x * 3.6 << std::endl;
-  std::cout << "current gear is " << oCar->_gear << std::endl;
+  
+  std::cout << "1 " << oCar->_wheelSpinVel(0) << std::endl;
+  std::cout << "1 " << oCar->_wheelFx(0) << std::endl;
+  std::cout << "1 " << oCar->_brakeTemp(0) << std::endl;
+
+  std::cout << "2 " << oCar->_wheelSpinVel(1) << std::endl;
+  std::cout << "2 " << oCar->_wheelFx(1) << std::endl;
+  std::cout << "2 " << oCar->_brakeTemp(1) << std::endl;
+
+  std::cout << "3 " << oCar->_wheelSpinVel(2) << std::endl;
+  std::cout << "3 " << oCar->_wheelFx(2) << std::endl;
+  std::cout << "3 " << oCar->_brakeTemp(2) << std::endl;
+  
+  std::cout << "4 " << oCar->_wheelSpinVel(3) << std::endl;
+  std::cout << "4 " << oCar->_wheelFx(3) << std::endl;
+  std::cout << "4 " << oCar->_brakeTemp(3) << std::endl;
+
+  //std::cout << "current _speed_x is " << oCar->_speed_x << std::endl;
+  //std::cout << "current speed kph is " << oCar->_speed_x * 3.6 << std::endl;
+  //std::cout << "current gear is " << oCar->_gear << std::endl;
   //PRINT DEBUG INFO
 }
 
