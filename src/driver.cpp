@@ -294,14 +294,8 @@ void TDriver::Drive()
   oCar->_steerCmd = (tdble)(angle / oCar->_steerLock);
   //UPDATE STEERING 
 
-  //UPDATE GEARS/CLUTCH 
-  updateTimer();
-  oCar->_gearCmd = getGear();
-  oCar->_clutchCmd = (tdble) getClutch();  // must be after gear
-  //UPDATE GEARS/CLUTCH
-
   //CONTROL SPEED 
-  double targetspeedkph = 58.0;
+  double targetspeedkph = 120; //58.0;
   double targetspeed = targetspeedkph/3.6;
   controlSpeed(mAccel, targetspeed);
   mSpeed = oCar->_speed_x;
@@ -314,6 +308,12 @@ void TDriver::Drive()
   
   //CONTROL SPEED 
 
+  //UPDATE GEARS/CLUTCH 
+  updateTimer();
+  oCar->_gearCmd = getGear();
+  oCar->_clutchCmd = (tdble) getClutch();  // must be after gear
+  //UPDATE GEARS/CLUTCH
+
   //MISC
   //oCar->_brakeCmd = (tdble) filterABS(getBrake(mMaxspeed));
   //oCar->_accelCmd = (tdble) filterTCLSideSlip(filterTCL(getAccel(mMaxspeed)));  // must be after brake;
@@ -323,10 +323,19 @@ void TDriver::Drive()
   std::system("clear;");
 
   oCar->ctrl.singleWheelBrakeMode = 1;
-  cycleABS( brakeCMD, wheelSpinVelocity );
+  oCar->_brakeFRCmd = 0.0;
+  oCar->_brakeFLCmd = 0.0;
+  oCar->_brakeRRCmd = 0.0;
+  oCar->_brakeRLCmd = 0.0;
+
+  float inputPressure;
+
+  //cycleABS( inputPressure, brakeCMD, wheelSpinVelocity );
 
   //std::cout << "wheel1 spinvel is: " << 0.159155 * *wheelSpinVelocity[0] * 2 * PI * oCar->_wheelRadius(0) << std::endl;
   //std::cout << "wheel1 vel is:     " << mSpeed << std::endl;
+
+  std::cout << "wheel1 rad is: " << oCar->_wheelRadius(0) << std::endl;
 
   //*wheelVelocity[0]
 
