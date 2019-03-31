@@ -193,6 +193,33 @@ charlierobot/fast:
 	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build
 .PHONY : charlierobot/fast
 
+src/ABS.o: src/ABS.c.o
+
+.PHONY : src/ABS.o
+
+# target to build an object file
+src/ABS.c.o:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.o
+.PHONY : src/ABS.c.o
+
+src/ABS.i: src/ABS.c.i
+
+.PHONY : src/ABS.i
+
+# target to preprocess a source file
+src/ABS.c.i:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.i
+.PHONY : src/ABS.c.i
+
+src/ABS.s: src/ABS.c.s
+
+.PHONY : src/ABS.s
+
+# target to generate assembly for a file
+src/ABS.c.s:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.s
+.PHONY : src/ABS.c.s
+
 src/ClothoidPath.o: src/ClothoidPath.cpp.o
 
 .PHONY : src/ClothoidPath.o
@@ -532,6 +559,9 @@ help:
 	@echo "... list_install_components"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... src/ABS.o"
+	@echo "... src/ABS.i"
+	@echo "... src/ABS.s"
 	@echo "... src/ClothoidPath.o"
 	@echo "... src/ClothoidPath.i"
 	@echo "... src/ClothoidPath.s"

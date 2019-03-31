@@ -202,16 +202,31 @@ void TDriver::InitTrack(PTrack Track, PCarHandle CarHandle, PCarSettings *CarPar
   mSkillDriver = MAX(0.95, 1.0 - 0.05 * driverskill);
 }
 
+float* brakeCMD[4];
+float* wheelSpinVelocity[4];
 
 void TDriver::NewRace(PtCarElt Car, PSituation Situation)
 {
   oCar = Car;
   oSituation = Situation;
   readVarSpecs(oCar->_carHandle);
+
   //CHARLIE CODE :) CHARLIE CODE
-  //std::cout << "XXXXXXX " << oCar->_carHandle << std::endl;
-  //oCar-> _singleWheelBrakeMode = 1;
+
+  oCar->ctrl.singleWheelBrakeMode = 1;
+
+  brakeCMD[0] = &(oCar->_brakeFLCmd); //FL
+  brakeCMD[1] = &(oCar->_brakeFRCmd); //FR
+  brakeCMD[2] = &(oCar->_brakeRLCmd); //RL
+  brakeCMD[3] = &(oCar->_brakeRRCmd); //RR
+
+  wheelSpinVelocity[0] = &(oCar->_wheelSpinVel(1)); //FL
+  wheelSpinVelocity[1] = &(oCar->_wheelSpinVel(0)); //FR
+  wheelSpinVelocity[2] = &(oCar->_wheelSpinVel(3)); //RL
+  wheelSpinVelocity[3] = &(oCar->_wheelSpinVel(2)); //RR
+
   //CHARLIE CODE :) CHARLIE CODE
+
   initCa(oCar->_carHandle);
   initCw(oCar->_carHandle);
   initBrakes();
@@ -239,6 +254,9 @@ void TDriver::NewRace(PtCarElt Car, PSituation Situation)
   mPrevRacePos= Car->_pos;
 }
 
+extern "C" {
+  #include "ABS.h"
+}
 
 void TDriver::Drive()
 {
@@ -283,19 +301,13 @@ void TDriver::Drive()
   //UPDATE GEARS/CLUTCH
 
   //CONTROL SPEED 
-  double targetspeedkph = 48.0;
+  double targetspeedkph = 58.0;
   double targetspeed = targetspeedkph/3.6;
   controlSpeed(mAccel, targetspeed);
   mSpeed = oCar->_speed_x;
 
-  oCar->ctrl.singleWheelBrakeMode = 1;
-  oCar->_brakeRRCmd = (tdble)0.0;
-  oCar->_brakeFRCmd = (tdble)0.0;
-  oCar->_brakeFRCmd = (tdble)0.0;
-  oCar->_brakeFRCmd = (tdble)0.0;
-
   oCar->_accelCmd = (tdble)mAccel; //(tdble) 0.8;
-  oCar->_brakeCmd = (tdble)0.0; 
+  //oCar->_brakeCmd = (tdble)0.0; 
 
   //oCar->_brakeCmd = (tdble)filterABS(getBrake(targetspeed));
   //oCar->_accelCmd = (tdble)filterTCLSideSlip(filterTCL(mAccel));;
@@ -309,28 +321,18 @@ void TDriver::Drive()
 
   //PRINT DEBUG INFO
   std::system("clear;");
-  
-  std::cout << "1 " << oCar->_wheelSpinVel(0) << std::endl;
-  std::cout << "1 " << oCar->_wheelFx(0) << std::endl;
-  std::cout << "1 " << oCar->_brakeTemp(0) << std::endl;
 
-  std::cout << "2 " << oCar->_wheelSpinVel(1) << std::endl;
-  std::cout << "2 " << oCar->_wheelFx(1) << std::endl;
-  std::cout << "2 " << oCar->_brakeTemp(1) << std::endl;
+  oCar->ctrl.singleWheelBrakeMode = 1;
+  cycleABS( brakeCMD, wheelSpinVelocity );
 
-  std::cout << "3 " << oCar->_wheelSpinVel(2) << std::endl;
-  std::cout << "3 " << oCar->_wheelFx(2) << std::endl;
-  std::cout << "3 " << oCar->_brakeTemp(2) << std::endl;
-  
-  std::cout << "4 " << oCar->_wheelSpinVel(3) << std::endl;
-  std::cout << "4 " << oCar->_wheelFx(3) << std::endl;
-  std::cout << "4 " << oCar->_brakeTemp(3) << std::endl;
+  //std::cout << "wheel1 spinvel is: " << 0.159155 * *wheelSpinVelocity[0] * 2 * PI * oCar->_wheelRadius(0) << std::endl;
+  //std::cout << "wheel1 vel is:     " << mSpeed << std::endl;
 
-  //std::cout << "current _speed_x is " << oCar->_speed_x << std::endl;
-  //std::cout << "current speed kph is " << oCar->_speed_x * 3.6 << std::endl;
-  //std::cout << "current gear is " << oCar->_gear << std::endl;
+  //*wheelVelocity[0]
+
   //PRINT DEBUG INFO
 }
+
 
 
 int TDriver::PitCmd()                               // Handle pitstop

@@ -11,11 +11,12 @@ file(REMOVE_RECURSE
   "CMakeFiles/charlierobot.dir/src/pit.cpp.o"
   "CMakeFiles/charlierobot.dir/src/spline.cpp.o"
   "CMakeFiles/charlierobot.dir/src/Utils.cpp.o"
+  "CMakeFiles/charlierobot.dir/src/ABS.c.o"
   "../../../lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.pdb"
   "../../../lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.so"
 )
 
 # Per-language clean rules from dependency scanning.
-foreach(lang CXX)
+foreach(lang C CXX)
   include(CMakeFiles/charlierobot.dir/cmake_clean_${lang}.cmake OPTIONAL)
 endforeach()

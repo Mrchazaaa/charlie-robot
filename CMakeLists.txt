@@ -33,6 +33,8 @@ SET(ROBOT_SOURCES
     src/Utils.h
     src/Vec2d.h
     src/Vec3d.h
+    src/ABS.c
+    src/ABS.h
 )
 
 

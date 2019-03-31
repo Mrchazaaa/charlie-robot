@@ -6,6 +6,8 @@
 
 #IncludeRegexTransform: 
 
+/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/ABS.h
+
 /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/ClothoidPath.cpp
 ClothoidPath.h
 /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/ClothoidPath.h
@@ -141,6 +143,8 @@ tgfclient.h
 /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/tgfclient.h
 sys/time.h
 -
+ABS.h
+/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/ABS.h
 
 /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/driver.h
 torcs_or_sd.h

@@ -1,8 +1,41 @@
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
+  "C"
   "CXX"
   )
 # The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_C
+  "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/ABS.c" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.o"
+  )
+set(CMAKE_C_COMPILER_ID "GNU")
+
+# Preprocessor definitions for this target.
+set(CMAKE_TARGET_DEFINITIONS_C
+  "GL_GLEXT_PROTOTYPES"
+  "HAVE_CONFIG_H"
+  "SDL_FORCEFEEDBACK"
+  "SDL_JOYSTICK"
+  "SHM"
+  "SPEED_DREAMS"
+  "THIRD_PARTY_EXPAT"
+  "TRACE_LEVEL=5"
+  "TRACE_OUT"
+  "UNLOAD_SSGGRAPH"
+  "USE_RANDR_EXT"
+  "WEBSERVER"
+  "_DEFAULT_SOURCE"
+  )
+
+# The include file search paths:
+set(CMAKE_C_TARGET_INCLUDE_PATH
+  "."
+  "src/interfaces"
+  "src/libs/learning"
+  "src/libs/math"
+  "src/libs/portability"
+  "src/libs/robottools"
+  "src/libs/tgf"
+  )
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/ClothoidPath.cpp" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ClothoidPath.cpp.o"
   "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/LinePath.cpp" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/LinePath.cpp.o"
