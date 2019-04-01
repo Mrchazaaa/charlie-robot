@@ -220,6 +220,11 @@ void TDriver::NewRace(PtCarElt Car, PSituation Situation)
   brakeCMD[2] = &(oCar->_brakeRLCmd); //RL
   brakeCMD[3] = &(oCar->_brakeRRCmd); //RR
 
+  oCar->_brakeFRCmd = 0.0;
+  oCar->_brakeFLCmd = 0.0;
+  oCar->_brakeRRCmd = 0.0;
+  oCar->_brakeRLCmd = 0.0;
+
   wheelSpinVelocity[0] = &(oCar->_wheelSpinVel(1)); //FL
   wheelSpinVelocity[1] = &(oCar->_wheelSpinVel(0)); //FR
   wheelSpinVelocity[2] = &(oCar->_wheelSpinVel(3)); //RL
@@ -258,6 +263,8 @@ extern "C" {
   #include "ABS.h"
 }
 
+bool begunBraking = false;
+
 void TDriver::Drive()
 {
 //#ifdef TIME_ANALYSIS
@@ -294,52 +301,56 @@ void TDriver::Drive()
   oCar->_steerCmd = (tdble)(angle / oCar->_steerLock);
   //UPDATE STEERING 
 
-  //CONTROL SPEED 
-  double targetspeedkph = 120; //58.0;
-  double targetspeed = targetspeedkph/3.6;
-  controlSpeed(mAccel, targetspeed);
-  mSpeed = oCar->_speed_x;
-
-  oCar->_accelCmd = (tdble)mAccel; //(tdble) 0.8;
-  //oCar->_brakeCmd = (tdble)0.0; 
-
-  //oCar->_brakeCmd = (tdble)filterABS(getBrake(targetspeed));
-  //oCar->_accelCmd = (tdble)filterTCLSideSlip(filterTCL(mAccel));;
-  
-  //CONTROL SPEED 
-
   //UPDATE GEARS/CLUTCH 
   updateTimer();
   oCar->_gearCmd = getGear();
   oCar->_clutchCmd = (tdble) getClutch();  // must be after gear
   //UPDATE GEARS/CLUTCH
 
-  //MISC
-  //oCar->_brakeCmd = (tdble) filterABS(getBrake(mMaxspeed));
-  //oCar->_accelCmd = (tdble) filterTCLSideSlip(filterTCL(getAccel(mMaxspeed)));  // must be after brake;
-  //MISC
+  //CONTROL SPEED 
+  double targetspeedkph = 55.0;
+  double targetspeed = targetspeedkph/3.6;
+  controlSpeed(mAccel, targetspeed);
+  mSpeed = oCar->_speed_x;
+  oCar->_accelCmd = (tdble)/*filterTCLSideSlip(filterTCL(*/mAccel/*))*/; 
+  //oCar->_brakeCmd = (tdble)0.0; //filterABS(getBrake(targetspeed));
+  //CONTROL SPEED 
+
+  //CONTROL BRAKING
+  oCar->ctrl.singleWheelBrakeMode = 1;
+
+  if (!begunBraking) {
+    oCar->_brakeFRCmd = 0.0;
+    oCar->_brakeFLCmd = 0.0;
+    oCar->_brakeRRCmd = 0.0;
+    oCar->_brakeRLCmd = 0.0;
+  } 
+  if ( strcmp(oCar->_trkPos.seg->name, "begin brake") == 0 || begunBraking) {
+    float inputPressure = 0.5;
+    *brakeCMD[0] = inputPressure;
+    *brakeCMD[1] = inputPressure;
+    *brakeCMD[2] = inputPressure;
+    *brakeCMD[3] = inputPressure;
+    begunBraking = true;
+
+    //std::cout << "BRAKING" << std::endl;
+  }
+
+  //cycleABS( inputPressure, brakeCMD, wheelSpinVelocity );
+
+  //CONTROL BRAKING
 
   //PRINT DEBUG INFO
   std::system("clear;");
 
-  oCar->ctrl.singleWheelBrakeMode = 1;
-  oCar->_brakeFRCmd = 0.0;
-  oCar->_brakeFLCmd = 0.0;
-  oCar->_brakeRRCmd = 0.0;
-  oCar->_brakeRLCmd = 0.0;
+  std::cout << oCar->_wheelRadius(0) << std::endl;
 
-  float inputPressure;
-
-  //cycleABS( inputPressure, brakeCMD, wheelSpinVelocity );
-
-  //std::cout << "wheel1 spinvel is: " << 0.159155 * *wheelSpinVelocity[0] * 2 * PI * oCar->_wheelRadius(0) << std::endl;
-  //std::cout << "wheel1 vel is:     " << mSpeed << std::endl;
-
-  std::cout << "wheel1 rad is: " << oCar->_wheelRadius(0) << std::endl;
-
-  //*wheelVelocity[0]
+  if (begunBraking) {
+    std::cout << "BRAKING" << std::endl;
+  }
 
   //PRINT DEBUG INFO
+
 }
 
 

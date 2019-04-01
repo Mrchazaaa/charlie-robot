@@ -11,35 +11,71 @@
 #define MIN_PRESSURE_THRESHOLD         0
 #define MIN_VEHICLE_VELOCITY_THRESHOLD 0
 #define MIN_WHEEL_VELOCITY_THRESHOLD   0
-//#define MIN_PRESSURE_THRESHOLD         NULL
+#define MIN_WHEEL_SPIN_ACCELERATION    0
+
+#define PI 3.14159265358979323846
 
 static int phaseStates[4] = {OFF, OFF, OFF, OFF}; //used to remember which state the ABS algorithm is currently in (one for each wheel) 
+
+static float inputPressure; 
+static float *wheelBrakeCMD[4]; 
+
+float maxWheelVelocity(float wheelVelocity[4]) {
+  float maxVelocity = wheelVelocity[0];
+
+  int i;
+  for ( i = 1 ; i < 4 ; i++ )
+  {
+    if (wheelVelocity[i] > maxVelocity) {
+      maxVelocity = wheelVelocity[i];
+    }
+  }
+
+  return maxVelocity;
+}
 
 void cycleABS( float inputPressure, float *wheelBrakeCMD[4], float *wheelSpinVelocity[4] )
 {
 
+  inputPressure = inputPressure;
+  wheelBrakeCMD = wheelBrakeCMD;
+
   //calculate wheel speed
   float wheelVelocity[4];
 
+  //wheel1 spinvel is: 0.159155 * *wheelSpinVelocity[0] * 2 * PI * oCar->_wheelRadius(0) 
+  wheelVelocity[0] =   0.159155 * *wheelSpinVelocity[0] * 2 * PI *  0.3179;
+  wheelVelocity[1] =   0.159155 * *wheelSpinVelocity[0] * 2 * PI *  0.3179;
+  wheelVelocity[2] =   0.159155 * *wheelSpinVelocity[0] * 2 * PI *  0.3179;
+  wheelVelocity[3] =   0.159155 * *wheelSpinVelocity[0] * 2 * PI *  0.3179;
 
   //calculate vehicle speed
-  float vehicleSpeed;
+  float vehicleSpeed = maxWheelVelocity(wheelVelocity);
   
   //only activate ABS if threshold values are exceeded
   if ( vehicleSpeed > MIN_VEHICLE_VELOCITY_THRESHOLD 
      && inputPressure > MIN_PRESSURE_THRESHOLD ) {
     
-    //phase();
+    //only activate ABS for the wheels whos individual velocity thresholds are exceeded
+    int i;
+    for ( i = 0 ; i < 4 ; i++ )
+    {
+      //float wheelSlip = (vehicleSpeed - wheelVelocity[i])/vehicleSpeed ;
 
-  } else { //if thresholds are not met, turn off ABS
+      if ( wheelVelocity[i] > MIN_WHEEL_VELOCITY_THRESHOLD ) {
+        phase(i);
+        return;
+      }
+    }
 
-    phaseStates[0] = OFF;
-    phaseStates[1] = OFF;
-    phaseStates[2] = OFF;
-    phaseStates[3] = OFF;
+  } 
+  //if thresholds are not met, turn off ABS
 
-  }
-  
+  phaseStates[0] = OFF;
+  phaseStates[1] = OFF;
+  phaseStates[2] = OFF;
+  phaseStates[3] = OFF;
+
   //*wheelBrakeCMD[FL] = 1.0f;
 
   return;
@@ -53,8 +89,13 @@ void phase(int wheel) {
       phaseStates[wheel] = 1;
       break;
 
-    case 1:
-      phaseStates[wheel] = 2;
+    case 1: 
+      
+      *wheelBrakeCMD[wheel] = inputPressure;
+      
+
+      //phaseStates[wheel] = 2;
+
       break;
 	
     case 2:
