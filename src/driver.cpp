@@ -264,6 +264,10 @@ extern "C" {
 }
 
 bool begunBraking = false;
+double num1time = NULL;// = oSituation->currentTime;
+double num2time = NULL;// = oSituation->currentTime;
+float num1slip = NULL;
+float num2slip = NULL;
 
 void TDriver::Drive()
 {
@@ -334,6 +338,7 @@ void TDriver::Drive()
     begunBraking = true;
 
     //std::cout << "BRAKING" << std::endl;
+
   }
 
   //cycleABS( inputPressure, brakeCMD, wheelSpinVelocity );
@@ -343,10 +348,27 @@ void TDriver::Drive()
   //PRINT DEBUG INFO
   std::system("clear;");
 
-  std::cout << oCar->_wheelRadius(0) << std::endl;
+  num2time = num1time;
+  num1time = oSituation->currentTime;
+
+  num2slip = num1slip; 
+  num1slip = (oCar->_speed_x - 0.159155 * *wheelSpinVelocity[0] * 2 * PI *  0.3179 )/ oCar->_speed_x;
+
+  if (num2time != NULL) {
+    double deltaTime = num1time - num2time;
+     
+     
+    double mySlipAccel = (num2slip - num1slip) / (num2time - num1time);
+    
+    std::cout << "my wheel1 slip accel is: " << mySlipAccel << std::endl;
+    std::cout << "wheel1 slip accel is: " << oCar->_wheelSlipAccel(0) << std::endl;
+  }  
+
+  //std::cout << oCar->_wheelRadius(0) << std::endl;
+
 
   if (begunBraking) {
-    std::cout << "BRAKING" << std::endl;
+    //std::cout << "BRAKING" << std::endl;
   }
 
   //PRINT DEBUG INFO
