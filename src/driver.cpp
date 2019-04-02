@@ -203,6 +203,7 @@ void TDriver::InitTrack(PTrack Track, PCarHandle CarHandle, PCarSettings *CarPar
 }
 
 float* brakeCMD[4];
+float* slipAccel[4];
 float* wheelSpinVelocity[4];
 
 void TDriver::NewRace(PtCarElt Car, PSituation Situation)
@@ -219,6 +220,11 @@ void TDriver::NewRace(PtCarElt Car, PSituation Situation)
   brakeCMD[1] = &(oCar->_brakeFRCmd); //FR
   brakeCMD[2] = &(oCar->_brakeRLCmd); //RL
   brakeCMD[3] = &(oCar->_brakeRRCmd); //RR
+
+  slipAccel[0] = &(oCar->_wheelSlipAccel(1));
+  slipAccel[1] = &(oCar->_wheelSlipAccel(0));
+  slipAccel[2] = &(oCar->_wheelSlipAccel(3));
+  slipAccel[3] = &(oCar->_wheelSlipAccel(2));
 
   oCar->_brakeFRCmd = 0.0;
   oCar->_brakeFLCmd = 0.0;
@@ -264,8 +270,8 @@ extern "C" {
 }
 
 bool begunBraking = false;
-double num1time = NULL;// = oSituation->currentTime;
-double num2time = NULL;// = oSituation->currentTime;
+double num1time = 0;// = oSituation->currentTime;
+double num2time = 0;// = oSituation->currentTime;
 float num1slip = NULL;
 float num2slip = NULL;
 
@@ -323,6 +329,9 @@ void TDriver::Drive()
   //CONTROL BRAKING
   oCar->ctrl.singleWheelBrakeMode = 1;
 
+  num2time = num1time;
+  num1time = oSituation->currentTime;
+
   if (!begunBraking) {
     oCar->_brakeFRCmd = 0.0;
     oCar->_brakeFLCmd = 0.0;
@@ -331,38 +340,39 @@ void TDriver::Drive()
   } 
   if ( strcmp(oCar->_trkPos.seg->name, "begin brake") == 0 || begunBraking) {
     float inputPressure = 0.5;
-    *brakeCMD[0] = inputPressure;
-    *brakeCMD[1] = inputPressure;
-    *brakeCMD[2] = inputPressure;
-    *brakeCMD[3] = inputPressure;
+    //*brakeCMD[0] = inputPressure;
+    //*brakeCMD[1] = inputPressure;
+    //*brakeCMD[2] = inputPressure;
+    //*brakeCMD[3] = inputPressure;
     begunBraking = true;
 
+
+
+    cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, slipAccel, num1time - num2time );
     //std::cout << "BRAKING" << std::endl;
 
   }
 
-  //cycleABS( inputPressure, brakeCMD, wheelSpinVelocity );
-
   //CONTROL BRAKING
 
   //PRINT DEBUG INFO
-  std::system("clear;");
+  //std::system("clear;");
 
-  num2time = num1time;
-  num1time = oSituation->currentTime;
+  //num2time = num1time;
+  //num1time = oSituation->currentTime;
 
-  num2slip = num1slip; 
-  num1slip = (oCar->_speed_x - 0.159155 * *wheelSpinVelocity[0] * 2 * PI *  0.3179 )/ oCar->_speed_x;
+  //num2slip = num1slip; 
+  //num1slip = (oCar->_speed_x - 0.159155 * *wheelSpinVelocity[0] * 2 * PI *  0.3179 )/ oCar->_speed_x;
 
   if (num2time != NULL) {
-    double deltaTime = num1time - num2time;
+    //double deltaTime = num1time - num2time;
      
      
-    double mySlipAccel = (num2slip - num1slip) / (num2time - num1time);
+    //double mySlipAccel = (num2slip - num1slip) / (num2time - num1time);
     
-    std::cout << "my wheel1 slip accel is: " << mySlipAccel << std::endl;
-    std::cout << "wheel1 slip accel is: " << oCar->_wheelSlipAccel(0) << std::endl;
-  }  
+    //std::cout << "delta is: " << deltaTime << std::endl;
+    //std::cout << "wheel1 slip accel is: " << oCar->_wheelSlipAccel(0) << std::endl;
+  }
 
   //std::cout << oCar->_wheelRadius(0) << std::endl;
 

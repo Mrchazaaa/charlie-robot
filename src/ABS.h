@@ -1,6 +1,8 @@
  #ifndef ABS_H_
  #define ABS_H_
 
- void cycleABS( float inputPressure, float *wheelBrakeCMD[4], float *wheelSpinVelocity[4] );
+ void phase(int wheel);
+
+ void cycleABS( float newInputPressure, float *wheelBrakeCMD[4], float *newWheelSpinVelocity[4], float *newWheelSlipAcceleration[4], float newTimeStamp );
 
  #endif

@@ -8,12 +8,19 @@
 #define RR 3 //used to access wheel index for REAR RIGHT
 
 //threshold values above which ABS is activated
-#define MIN_PRESSURE_THRESHOLD         0
+#define MIN_PRESSURE_THRESHOLD         70000
 #define MIN_VEHICLE_VELOCITY_THRESHOLD 0
-#define MIN_WHEEL_VELOCITY_THRESHOLD   0
-#define MIN_WHEEL_SPIN_ACCELERATION    0
-#define MAX_WHEEL_SPIN_ACCELERATION    0
-#define MAX_WHEEL_SLIP                 0
+#define MIN_WHEEL_VELOCITY_THRESHOLD   70.4 //rads/sec
+#define MIN_WHEEL_SPIN_ACCELERATION    -175 //rad/sec^2
+#define MAX_WHEEL_SPIN_ACCELERATION    50 //rad/sec^2
+#define MAX_WHEEL_SLIP                 0.15
+#define MAX_BRAKE_PRESSURE             13000000 //Pa
+#define RELEASE_RATE                   7000000  //Pa/sec
+#define APPLY_DELAY                    0.05
+#define PRIMARY_APPLY_RATE             35000000
+#define SECONDARY_APPLY_RATE           3500000
+
+static float TIMER = -1;
 
 #define PI 3.14159265358979323846
 
@@ -26,6 +33,7 @@ static float wheelSpinAcceleration[4] = {0, 0, 0, 0};
 static float wheelSlipAcceleration[4] = {0, 0, 0, 0}; 
 static float wheelSlip[4] = {0, 0, 0, 0}; 
 static float lastTimeStamp = 0;
+static float deltaTime = 0; //Time since last ABS call
 
 float maxWheelVelocity(float wheelVelocity[4]) {
   float maxVelocity = wheelVelocity[0];
@@ -45,11 +53,14 @@ void cycleABS( float newInputPressure, float *wheelBrakeCMD[4], float *newWheelS
 {
 
   //calculate wheel spin acceleration
-  float deltaTime = newTimeStamp - lastTimeStamp;
-  wheelSpinAcceleration[0] = (*newWheelSpinVelocity[0] - wheelSpinVelocity[0])/deltaTime;
-  wheelSpinAcceleration[1] = (*newWheelSpinVelocity[1] - wheelSpinVelocity[1])/deltaTime;
-  wheelSpinAcceleration[2] = (*newWheelSpinVelocity[2] - wheelSpinVelocity[2])/deltaTime;
-  wheelSpinAcceleration[3] = (*newWheelSpinVelocity[3] - wheelSpinVelocity[3])/deltaTime;
+  float newDeltaTime = newTimeStamp - lastTimeStamp;
+
+  deltaTime = newDeltaTime;
+
+  wheelSpinAcceleration[0] = (*newWheelSpinVelocity[0] - wheelSpinVelocity[0])/newDeltaTime;
+  wheelSpinAcceleration[1] = (*newWheelSpinVelocity[1] - wheelSpinVelocity[1])/newDeltaTime;
+  wheelSpinAcceleration[2] = (*newWheelSpinVelocity[2] - wheelSpinVelocity[2])/newDeltaTime;
+  wheelSpinAcceleration[3] = (*newWheelSpinVelocity[3] - wheelSpinVelocity[3])/newDeltaTime;
   
   //update wheel spin velocity
   wheelSpinVelocity[0] = *newWheelSpinVelocity[0];
@@ -89,6 +100,7 @@ void cycleABS( float newInputPressure, float *wheelBrakeCMD[4], float *newWheelS
 
       if ( wheelSpinVelocity[i] > MIN_WHEEL_VELOCITY_THRESHOLD ) {
         phase(i);
+        *wheelBrakeCMD[i] = *wheelBrakeCMD[i];
       } else {
         phaseStates[i] = OFF;
       }
@@ -98,9 +110,12 @@ void cycleABS( float newInputPressure, float *wheelBrakeCMD[4], float *newWheelS
     phaseStates[1] = OFF;
     phaseStates[2] = OFF;
     phaseStates[3] = OFF;
+
+    *wheelBrakeCMD[0] = inputPressure;
+    *wheelBrakeCMD[1] = inputPressure;
+    *wheelBrakeCMD[2] = inputPressure;
+    *wheelBrakeCMD[3] = inputPressure;
   }
-  
-  //*wheelBrakeCMD[FL] = 1.0f;
 
   return;
 }
@@ -109,12 +124,12 @@ void phase(int wheel) {
   printf("wheel %d state is %d\n", wheel, phaseStates[wheel]);
   
   switch(phaseStates[wheel]) {
-    case 0:
+    case OFF:
       phaseStates[wheel] = 1;
       break;
 
     case 1: //Initial application 
-      
+      {      
       *wheelBrakeCMD[wheel] = inputPressure;
       
       //if wheel spin acceleration threshold is surpassed, continue to phase 2
@@ -122,9 +137,9 @@ void phase(int wheel) {
         phaseStates[wheel] = 2;
       }
       break;
-	
+      }
     case 2: //Maintain pressure
-
+      {
       //Output pressure is set equal to previous pressure 
       *wheelBrakeCMD[wheel] = *wheelBrakeCMD[wheel];
 
@@ -137,20 +152,40 @@ void phase(int wheel) {
       }
 
       break;
-
+      }
     case 3: //Reduce pressure 
-      //IMPLEMENT delay
-      //phaseStates[wheel] = 4;
+      {
+      //calculate how much pressure should have been released since last ABS call (deltaTime)
+      float pressureToRelease = deltaTime * RELEASE_RATE;
+      //convert pressure to brake cmd equivalent
+      float cmdReleasePressure = pressureToRelease/MAX_BRAKE_PRESSURE;
+      *wheelBrakeCMD[wheel] = *wheelBrakeCMD[wheel] - cmdReleasePressure;
+      
+      if (wheelSpinAcceleration[wheel] > 0) {
+        phaseStates[wheel] = 4;
+      }
       break;
-
+      }
     case 4: //Maintain pressure
-
+      {
       //Output pressure is set equal to previous pressure 
       *wheelBrakeCMD[wheel] = *wheelBrakeCMD[wheel];
 
       //IMPLEMENT delay
+      if (TIMER == -1) { //I.E. the timer has not been set yet
+        TIMER = APPLY_DELAY;
+      } else {
+        TIMER -= deltaTime;
+      }
+
+      //if apply delay has elapsed
+      if (TIMER < 0 ) {
+        TIMER = -1;
+        phaseStates[wheel] = 5; 
+      }
 
       if (MAX_WHEEL_SPIN_ACCELERATION * 10 > wheelSpinAcceleration[wheel]) {
+        TIMER = -1;
         phaseStates[wheel] = 5;
       }
       //until the wheel spin acceleration (positive) exceeds +A, a
@@ -159,32 +194,57 @@ void phase(int wheel) {
       //increasing at an excessive rate).
 
       break;
-
+      }
     case 5: //Increase pressure
+      {
       //IMPLEMENT pressure increase
+
+      //calculate how much pressure should have been increased since last ABS call (deltaTime)
+      float pressureToApply = deltaTime * PRIMARY_APPLY_RATE;
+      //convert pressure to brake cmd equivalent
+      float cmdApplyPressure = pressureToApply/MAX_BRAKE_PRESSURE;
+      *wheelBrakeCMD[wheel] = *wheelBrakeCMD[wheel] + cmdApplyPressure;
 
       //until the wheel spin acceleration drops and again becomes negative
       if (wheelSpinAcceleration[wheel] < 0 ) {
         phaseStates[wheel] = 6;
       }
       break; 
-	
+      }
     case 6: //Maintain pressure
-
+      {
       //Output pressure is set equal to previous pressure 
       *wheelBrakeCMD[wheel] = *wheelBrakeCMD[wheel];
 
       //IMPLEMENT delay
+      if (TIMER == -1) { //I.E. the timer has not been set yet
+        TIMER = APPLY_DELAY;
+      } else {
+        TIMER -= deltaTime;
+      }
+
+      //if apply delay has elapsed
+      if (TIMER < 0 ) {
+        TIMER = -1;
+        phaseStates[wheel] = 7; 
+      }
 
       //until wheel angular acceleration again exceeds the Wheel Minimum Wheel Spin Acceleration (negative)
       //if wheel spin acceleration threshold is surpassed, continue to phase 7
       if (MIN_WHEEL_SPIN_ACCELERATION > wheelSpinAcceleration[wheel]) {
+        TIMER = -1;
         phaseStates[wheel] = 7;
       }
 
       break;
-
+      }
     case 7: //Increase pressure
+      {
+      //calculate how much pressure should have been increased since last ABS call (deltaTime)
+      float pressureToApply = deltaTime * SECONDARY_APPLY_RATE;
+      //convert pressure to brake cmd equivalent
+      float cmdApplyPressure = pressureToApply/MAX_BRAKE_PRESSURE;
+      *wheelBrakeCMD[wheel] = *wheelBrakeCMD[wheel] + cmdApplyPressure;
 
       //until wheel angular acceleration drops below the Wheel Minimum Angular Acceleration (negative)
       if (MIN_WHEEL_SPIN_ACCELERATION > wheelSpinAcceleration[wheel]) {
@@ -192,13 +252,15 @@ void phase(int wheel) {
       }
     
       break; 
-
+      }
     case 8: //Reduce pressure (a cycle is complete, return to phase 3)
+      {
       phaseStates[wheel] = 3;
       break;
   
     default : 
       printf("ABS state error\n");
       break;
+      }
   }
 }
