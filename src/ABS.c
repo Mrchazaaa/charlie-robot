@@ -92,15 +92,15 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
   //calculate vehicle speed
   float vehicleSpeed = maxWheelVelocity(wheelSpinVelocity);
 
-  wheelSlip[0] = (wheelSpinVelocity[0] - vehicleSpeed) / vehicleSpeed;
-  wheelSlip[1] = (wheelSpinVelocity[1] - vehicleSpeed) / vehicleSpeed;
-  wheelSlip[2] = (wheelSpinVelocity[2] - vehicleSpeed) / vehicleSpeed;
-  wheelSlip[3] = (wheelSpinVelocity[3] - vehicleSpeed) / vehicleSpeed; 
+  wheelSlip[0] = (vehicleSpeed - wheelSpinVelocity[0]) / vehicleSpeed;
+  wheelSlip[1] = (vehicleSpeed - wheelSpinVelocity[1]) / vehicleSpeed;
+  wheelSlip[2] = (vehicleSpeed - wheelSpinVelocity[2]) / vehicleSpeed;
+  wheelSlip[3] = (vehicleSpeed - wheelSpinVelocity[3]) / vehicleSpeed; 
   
   inputPressure = newInputPressure;
   //wheelBrakeCMD = wheelBrakeCMD; 
   lastTimeStamp = newTimeStamp;
-    
+ 
 
   //wheel1 spinvel is: 0.159155 * *wheelSpinVelocity[0] * 2 * PI * oCar->_wheelRadius(0)
 
@@ -137,7 +137,7 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
 }
 
 void phase(int wheel) {
-  printf("state %d wheel %d accel is %.6f\n", phaseStates[wheel], wheel, wheelSpinAcceleration[wheel]);
+  //printf("state %d wheel %d accel is %.6f\n", phaseStates[wheel], wheel, wheelSpinAcceleration[wheel]);
   
   switch(phaseStates[wheel]) {
     case OFF:

@@ -323,7 +323,7 @@ void TDriver::Drive()
   //UPDATE GEARS/CLUTCH
 
   //CONTROL SPEED 
-  double targetspeedkph = 130.0;
+  double targetspeedkph = 159.0;
   double targetspeed = targetspeedkph/3.6;
   controlSpeed(mAccel, targetspeed);
   mSpeed = oCar->_speed_x;
@@ -336,6 +336,8 @@ void TDriver::Drive()
 
   num2time = num1time;
   num1time = oSituation->currentTime;
+
+  //std::cout << "WHEEL 1 SPIN " << std::endl;
 
   if (!begunBraking) {
     float inputPressure = 0.0;
@@ -356,6 +358,7 @@ void TDriver::Drive()
 
     begunBraking = true;
 
+    std::cout << "spin for wheel 1 is " << getWheelSpinAcceleration(0) << std::endl;
 
     cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, slipAccel, num1time );
 
@@ -366,11 +369,37 @@ void TDriver::Drive()
            << *brakeCMD[1]   << " "
            << *brakeCMD[2]   << " "
            << *brakeCMD[3]   << " " 
+
+           << getWheelSpinVelocity(0) << " "
+           << getWheelSpinVelocity(1) << " "
+           << getWheelSpinVelocity(2) << " "
+           << getWheelSpinVelocity(3) << " "
+           
+           << getWheelSpinAcceleration(0) << " "
+           << getWheelSpinAcceleration(1) << " "
+           << getWheelSpinAcceleration(2) << " "
+           << getWheelSpinAcceleration(3) << " "
+           
+           << getWheelSlipAcceleration(0) << " "
+           << getWheelSlipAcceleration(1) << " "
+           << getWheelSlipAcceleration(2) << " "
+           << getWheelSlipAcceleration(3) << " "
+
+           << getWheelSlip(0) << " "
+           << getWheelSlip(1) << " "
+           << getWheelSlip(2) << " "
+           << getWheelSlip(3) << " "
+
            << getPhaseStates(0) << " "
            << getPhaseStates(1) << " "
            << getPhaseStates(2) << " "
-           << getPhaseStates(3) << " "
+           << getPhaseStates(3) << " "           
            << "\n";
+
+           //float getWheelSpinVelocity(int index) ;
+           //float getWheelSpinAcceleration(int index) ;
+           //float getWheelSlipAcceleration(int index) ;
+           //float getWheelSlip(int index) ;
 
 
     //std::cout << "NOT BRAKING" << std::endl;
