@@ -10,9 +10,9 @@
 //threshold values above which ABS is activated
 #define MIN_PRESSURE_THRESHOLD         70000
 #define MIN_VEHICLE_VELOCITY_THRESHOLD 0
-#define MIN_WHEEL_VELOCITY_THRESHOLD   70.4 //rads/sec
-#define MIN_WHEEL_SPIN_ACCELERATION    -175 //rad/sec^2
-#define MAX_WHEEL_SPIN_ACCELERATION    50 //rad/sec^2
+#define MIN_WHEEL_VELOCITY_THRESHOLD   20.4 //rads/sec
+#define MIN_WHEEL_SPIN_ACCELERATION    -2.5//-175 //rad/sec^2
+#define MAX_WHEEL_SPIN_ACCELERATION    1//50 //rad/sec^2
 #define MAX_WHEEL_SLIP                 0.15
 #define MAX_BRAKE_PRESSURE             13000000 //Pa
 #define RELEASE_RATE                   7000000  //Pa/sec
@@ -35,6 +35,12 @@ static float wheelSlip[4] = {0, 0, 0, 0};
 static float lastTimeStamp = 0;
 static float deltaTime = 0; //Time since last ABS call
 
+int getPhaseStates(int index) { return phaseStates[index]; }
+float getWheelSpinVelocity(int index) { return wheelSpinVelocity[index]; }
+float getWheelSpinAcceleration(int index) { return wheelSpinAcceleration[index]; }
+float getWheelSlipAcceleration(int index) { return wheelSlipAcceleration[index]; }
+float getWheelSlip(int index) { return wheelSlip[index]; }
+
 float maxWheelVelocity(float wheelVelocity[4]) {
   float maxVelocity = wheelVelocity[0];
 
@@ -49,8 +55,17 @@ float maxWheelVelocity(float wheelVelocity[4]) {
   return maxVelocity;
 }
 
-void cycleABS( float newInputPressure, float *wheelBrakeCMD[4], float *newWheelSpinVelocity[4], float *newWheelSlipAcceleration[4], float newTimeStamp )
+void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVelocity[4], float *newWheelSlipAcceleration[4], float newTimeStamp )
 {
+
+  if (lastTimeStamp = 0) {
+    lastTimeStamp = newTimeStamp;
+  }
+
+  wheelBrakeCMD[0] = brakeCMD[0];
+  wheelBrakeCMD[1] = brakeCMD[1];
+  wheelBrakeCMD[2] = brakeCMD[2];
+  wheelBrakeCMD[3] = brakeCMD[3];
 
   //calculate wheel spin acceleration
   float newDeltaTime = newTimeStamp - lastTimeStamp;
@@ -83,14 +98,15 @@ void cycleABS( float newInputPressure, float *wheelBrakeCMD[4], float *newWheelS
   wheelSlip[3] = (wheelSpinVelocity[3] - vehicleSpeed) / vehicleSpeed; 
   
   inputPressure = newInputPressure;
-  wheelBrakeCMD = wheelBrakeCMD; 
+  //wheelBrakeCMD = wheelBrakeCMD; 
   lastTimeStamp = newTimeStamp;
     
+
   //wheel1 spinvel is: 0.159155 * *wheelSpinVelocity[0] * 2 * PI * oCar->_wheelRadius(0)
 
   //only activate ABS if threshold values are exceeded
   if ( vehicleSpeed > MIN_VEHICLE_VELOCITY_THRESHOLD 
-     && inputPressure > MIN_PRESSURE_THRESHOLD ) {
+     && inputPressure > MIN_PRESSURE_THRESHOLD/MAX_BRAKE_PRESSURE ) {
     
     //only activate ABS for the wheels whos individual velocity thresholds are exceeded
     int i;
@@ -100,7 +116,7 @@ void cycleABS( float newInputPressure, float *wheelBrakeCMD[4], float *newWheelS
 
       if ( wheelSpinVelocity[i] > MIN_WHEEL_VELOCITY_THRESHOLD ) {
         phase(i);
-        *wheelBrakeCMD[i] = *wheelBrakeCMD[i];
+        //*wheelBrakeCMD[i] = *wheelBrakeCMD[i];
       } else {
         phaseStates[i] = OFF;
       }
@@ -121,13 +137,14 @@ void cycleABS( float newInputPressure, float *wheelBrakeCMD[4], float *newWheelS
 }
 
 void phase(int wheel) {
-  printf("wheel %d state is %d\n", wheel, phaseStates[wheel]);
+  printf("state %d wheel %d accel is %.6f\n", phaseStates[wheel], wheel, wheelSpinAcceleration[wheel]);
   
   switch(phaseStates[wheel]) {
     case OFF:
+    {
       phaseStates[wheel] = 1;
       break;
-
+    }
     case 1: //Initial application 
       {      
       *wheelBrakeCMD[wheel] = inputPressure;

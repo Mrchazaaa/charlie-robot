@@ -22,6 +22,7 @@
 #include "driver.h"
 #include "Utils.h"
 #include <iostream>
+#include <fstream>
 
 #ifdef CHARLIEROBOT_TORCS
 #include "tgfclient.h"
@@ -101,10 +102,14 @@ TDriver::~TDriver()
 {
 }
 
+std::ofstream absfile;
 
 void TDriver::InitTrack(PTrack Track, PCarHandle CarHandle, PCarSettings *CarParmHandle, PSituation Situation)
 {
   mTrack = Track;
+
+  absfile.open ("ABSOUTPUT.txt");
+  std::cout << "TIME BRAKE1 BRAKE2 BRAKE3 BRAKE4" << std::endl;
 
   // Get file handles
   char* trackname = strrchr(Track->filename, '/') + 1;
@@ -318,7 +323,7 @@ void TDriver::Drive()
   //UPDATE GEARS/CLUTCH
 
   //CONTROL SPEED 
-  double targetspeedkph = 55.0;
+  double targetspeedkph = 130.0;
   double targetspeed = targetspeedkph/3.6;
   controlSpeed(mAccel, targetspeed);
   mSpeed = oCar->_speed_x;
@@ -333,24 +338,43 @@ void TDriver::Drive()
   num1time = oSituation->currentTime;
 
   if (!begunBraking) {
-    oCar->_brakeFRCmd = 0.0;
-    oCar->_brakeFLCmd = 0.0;
-    oCar->_brakeRRCmd = 0.0;
-    oCar->_brakeRLCmd = 0.0;
+    float inputPressure = 0.0;
+
+    //oCar->_brakeFRCmd = 0.0;
+    //oCar->_brakeFLCmd = 0.0;
+    //oCar->_brakeRRCmd = 0.0;
+    //oCar->_brakeRLCmd = 0.0;
+    
+    cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, slipAccel, num1time );
+  
   } 
-  if ( strcmp(oCar->_trkPos.seg->name, "begin brake") == 0 || begunBraking) {
-    float inputPressure = 0.5;
-    //*brakeCMD[0] = inputPressure;
-    //*brakeCMD[1] = inputPressure;
-    //*brakeCMD[2] = inputPressure;
-    //*brakeCMD[3] = inputPressure;
+  if ( strcmp(oCar->_trkPos.seg->name, "begin brake") == 0 || strcmp(oCar->_trkPos.seg->name, "straight 11") == 0 || begunBraking) {
+    float inputPressure = 1.0f; //0.5;
+
+    oCar->_accelCmd = (tdble)0.0;
+    oCar->_clutchCmd = (tdble) 0.0; 
+
     begunBraking = true;
 
 
+    cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, slipAccel, num1time );
 
-    cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, slipAccel, num1time - num2time );
-    //std::cout << "BRAKING" << std::endl;
+    //absfile << "hello \n";
 
+    absfile << num1time << " " 
+           << *brakeCMD[0]   << " "
+           << *brakeCMD[1]   << " "
+           << *brakeCMD[2]   << " "
+           << *brakeCMD[3]   << " " 
+           << getPhaseStates(0) << " "
+           << getPhaseStates(1) << " "
+           << getPhaseStates(2) << " "
+           << getPhaseStates(3) << " "
+           << "\n";
+
+
+    //std::cout << "NOT BRAKING" << std::endl;
+    
   }
 
   //CONTROL BRAKING
@@ -363,6 +387,8 @@ void TDriver::Drive()
 
   //num2slip = num1slip; 
   //num1slip = (oCar->_speed_x - 0.159155 * *wheelSpinVelocity[0] * 2 * PI *  0.3179 )/ oCar->_speed_x;
+
+
 
   if (num2time != NULL) {
     //double deltaTime = num1time - num2time;
@@ -397,11 +423,17 @@ int TDriver::PitCmd()                               // Handle pitstop
 void TDriver::EndRace()                             // Stop race
 {
   // This is never called by TORCS! Don't use it!
+  //absfile << "shutting down\n";
+  //absfile.close();
+  //std::cout << "GOODBYE" << std::endl;
 }
 
 
 void TDriver::Shutdown()                            // Cleanup
 {
+  absfile << "shutting down\n";
+  absfile.close();
+  std::cout << "GOODBYE" << std::endl;
 }
 
 
