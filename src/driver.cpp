@@ -109,7 +109,8 @@ void TDriver::InitTrack(PTrack Track, PCarHandle CarHandle, PCarSettings *CarPar
   mTrack = Track;
 
   absfile.open ("ABSOUTPUT.txt");
-  std::cout << "TIME BRAKE1 BRAKE2 BRAKE3 BRAKE4" << std::endl;
+  absfile << "TIME REFSPEED	DELTA	BRAKE_0	BRAKE_1	BRAKE_2	BRAKE_3	WHEELSPIN_0	WHEELSPIN_1	WHEELSPIN_2	WHEELSPIN_3	WHEELSPINACC_0	WHEELSPINACC_1	WHEELSPINACC_2	WHEELSPINACC_3	WHEELSLIPACC_0	WHEELSLIPACC_1	WHEELSLIPACC_2	WHEELSLIPACC_3	WHEELSLIP_0	WHEELSLIP_1	WHEELSLIP_2	WHEELSLIP_3	PHASESTATE_0	PHASESTATE_1	PHASESTATE_2	PHASESTATE_3\n";
+
 
   // Get file handles
   char* trackname = strrchr(Track->filename, '/') + 1;
@@ -279,6 +280,8 @@ double num1time = 0;// = oSituation->currentTime;
 double num2time = 0;// = oSituation->currentTime;
 float num1slip = NULL;
 float num2slip = NULL;
+float startBrakePosition = 0;
+float startBrakeTime = 0;
 
 void TDriver::Drive()
 {
@@ -323,7 +326,7 @@ void TDriver::Drive()
   //UPDATE GEARS/CLUTCH
 
   //CONTROL SPEED 
-  double targetspeedkph = 159.0;
+  double targetspeedkph = 85.0;
   double targetspeed = targetspeedkph/3.6;
   controlSpeed(mAccel, targetspeed);
   mSpeed = oCar->_speed_x;
@@ -350,21 +353,39 @@ void TDriver::Drive()
     cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, slipAccel, num1time );
   
   } 
-  if ( strcmp(oCar->_trkPos.seg->name, "begin brake") == 0 || strcmp(oCar->_trkPos.seg->name, "straight 11") == 0 || begunBraking) {
+  if ( strcmp(oCar->_trkPos.seg->name, "begin brake") == 0 || strcmp(oCar->_trkPos.seg->name, "straight 13") == 0 || begunBraking) {
+
+    begunBraking = true;
+
+    if (startBrakePosition == 0) {
+      startBrakePosition = oCar->_drvPos_z;
+      startBrakeTime = num1time;
+      std::cout << "\nstart brake at " << startBrakePosition << " at time " << num1time << "\n";
+    }
+
+    if (mSpeed < 1) { //if car has stopped (just about)
+      std::cout << "stopped brake at " << oCar->_drvPos_z << " at time " << num1time << "\n";
+      std::cout << "length: " << oCar->_drvPos_z - startBrakePosition << "\n";
+      std::cout << "time  : " << num1time - startBrakeTime << "\n";
+      begunBraking = false;
+    }
+
+    if (begunBraking) {
     float inputPressure = 1.0f; //0.5;
 
     oCar->_accelCmd = (tdble)0.0;
     oCar->_clutchCmd = (tdble) 0.0; 
-
-    begunBraking = true;
-
-    std::cout << "spin for wheel 1 is " << getWheelSpinAcceleration(0) << std::endl;
 
     cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, slipAccel, num1time );
 
     //absfile << "hello \n";
 
     absfile << num1time << " " 
+           
+           << getVehicleSpeed() << " "
+
+           << getDeltaTime() << " "
+
            << *brakeCMD[0]   << " "
            << *brakeCMD[1]   << " "
            << *brakeCMD[2]   << " "
@@ -393,14 +414,15 @@ void TDriver::Drive()
            << getPhaseStates(0) << " "
            << getPhaseStates(1) << " "
            << getPhaseStates(2) << " "
-           << getPhaseStates(3) << " "           
+           << getPhaseStates(3) << " "   
+
+           << oCar->_wheelSlipOpt(0) << " "
+           << oCar->_wheelSlipOpt(1) << " "
+           << oCar->_wheelSlipOpt(2) << " "
+           << oCar->_wheelSlipOpt(3) << " "
+
            << "\n";
-
-           //float getWheelSpinVelocity(int index) ;
-           //float getWheelSpinAcceleration(int index) ;
-           //float getWheelSlipAcceleration(int index) ;
-           //float getWheelSlip(int index) ;
-
+    }
 
     //std::cout << "NOT BRAKING" << std::endl;
     
