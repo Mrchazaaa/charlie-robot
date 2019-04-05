@@ -205,7 +205,7 @@ void phase(int wheel) {
         phaseStates[wheel] = 5; 
       }
 
-      if (MAX_WHEEL_SPIN_ACCELERATION * 10 > wheelSpinAcceleration[wheel]) {
+      if (MAX_WHEEL_SPIN_ACCELERATION * 10 < wheelSpinAcceleration[wheel]) {
         TIMER = -1;
         phaseStates[wheel] = 5;
       }

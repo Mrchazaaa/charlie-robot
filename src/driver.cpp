@@ -109,7 +109,7 @@ void TDriver::InitTrack(PTrack Track, PCarHandle CarHandle, PCarSettings *CarPar
   mTrack = Track;
 
   absfile.open ("ABSOUTPUT.txt");
-  absfile << "TIME REFSPEED	DELTA	BRAKE_0	BRAKE_1	BRAKE_2	BRAKE_3	WHEELSPIN_0	WHEELSPIN_1	WHEELSPIN_2	WHEELSPIN_3	WHEELSPINACC_0	WHEELSPINACC_1	WHEELSPINACC_2	WHEELSPINACC_3	WHEELSLIPACC_0	WHEELSLIPACC_1	WHEELSLIPACC_2	WHEELSLIPACC_3	WHEELSLIP_0	WHEELSLIP_1	WHEELSLIP_2	WHEELSLIP_3	PHASESTATE_0	PHASESTATE_1	PHASESTATE_2	PHASESTATE_3\n";
+  absfile << "TIME REFSPEED	DELTA	BRAKE_0	BRAKE_1	BRAKE_2	BRAKE_3	WHEELSPIN_0	WHEELSPIN_1	WHEELSPIN_2	WHEELSPIN_3	WHEELSPINACC_0	WHEELSPINACC_1	WHEELSPINACC_2	WHEELSPINACC_3	WHEELSLIPACC_0	WHEELSLIPACC_1	WHEELSLIPACC_2	WHEELSLIPACC_3	WHEELSLIP_0	WHEELSLIP_1	WHEELSLIP_2	WHEELSLIP_3	PHASESTATE_0 PHASESTATE_1 PHASESTATE_2 PHASESTATE_3 OPTSLIP_0 OPTSLIP_1 OPTSLIP_2 OPTSLIP_3 MIN_VEHICLE_VELOCITY_THRESHOLD MIN_WHEEL_VELOCITY_THRESHOLD MIN_PRESSURE_THRESHOLD APPLY_DELAY PRIMARY_APPLY_RATE SECONDARY_APPLY_RATE RELEASE_RATE MIN_WHEEL_SPIN_ACCELERATION	MAX_WHEEL_SPIN_ACCELERATION	MAX_WHEEL_SLIP MAX_BRAKE_PRESSURE\n";
 
 
   // Get file handles
@@ -331,7 +331,7 @@ void TDriver::Drive()
   //UPDATE GEARS/CLUTCH
 
   //CONTROL SPEED 
-  double targetspeedkph = 85.0;
+  double targetspeedkph = 150.0;
   double targetspeed = targetspeedkph/3.6;
   controlSpeed(mAccel, targetspeed);
   mSpeed = oCar->_speed_x;
@@ -369,7 +369,7 @@ void TDriver::Drive()
 
     }
 
-    if (mSpeed < 10) { //if car has stopped (just about)
+    if (mSpeed < 5) { //if car has stopped (just about)
       std::cout << "stopped brake at " << oCar->_drvPos_z << " at time " << num1time << "\n";
       std::cout << "length: " << oCar->_drvPos_z - startBrakePosition << "\n";
       std::cout << "time  : " << num1time - startBrakeTime << "\n";
