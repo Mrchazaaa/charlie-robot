@@ -275,6 +275,10 @@ extern "C" {
   #include "ABS.h"
 }
 
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
+#define AT __FILE__ ":" TOSTRING(__LINE__)
+
 bool begunBraking = false;
 double num1time = 0;// = oSituation->currentTime;
 double num2time = 0;// = oSituation->currentTime;
@@ -365,7 +369,7 @@ void TDriver::Drive()
 
     }
 
-    if (mSpeed < 1) { //if car has stopped (just about)
+    if (mSpeed < 10) { //if car has stopped (just about)
       std::cout << "stopped brake at " << oCar->_drvPos_z << " at time " << num1time << "\n";
       std::cout << "length: " << oCar->_drvPos_z - startBrakePosition << "\n";
       std::cout << "time  : " << num1time - startBrakeTime << "\n";
@@ -425,7 +429,20 @@ void TDriver::Drive()
            << oCar->_wheelSlipOpt(2) << " "
            << oCar->_wheelSlipOpt(3) << " "
 
+           << TOSTRING(MIN_VEHICLE_VELOCITY_THRESHOLD) << " "
+           << TOSTRING(MIN_WHEEL_VELOCITY_THRESHOLD)   << " "
+           << TOSTRING(MIN_PRESSURE_THRESHOLD)         << " "
+           << TOSTRING(APPLY_DELAY)                    << " "
+           << TOSTRING(PRIMARY_APPLY_RATE)             << " "
+           << TOSTRING(SECONDARY_APPLY_RATE)           << " "
+           << TOSTRING(RELEASE_RATE)                   << " "
+           << TOSTRING(MIN_WHEEL_SPIN_ACCELERATION)    << " "
+           << TOSTRING(MAX_WHEEL_SPIN_ACCELERATION)    << " "
+           << TOSTRING(MAX_WHEEL_SLIP)                 << " "
+           << TOSTRING(MAX_BRAKE_PRESSURE)             << " "
+
            << "\n";
+
     }
 
     //std::cout << "NOT BRAKING" << std::endl;

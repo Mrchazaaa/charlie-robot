@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "ABS.h"
 
 #define OFF 0 //state used to represent the ABS as being non-active
 
@@ -7,18 +8,18 @@
 #define RL 2 //used to access wheel index for REAR LEFT
 #define RR 3 //used to access wheel index for REAR RIGHT
 
-//threshold values above which ABS is activated
-#define MIN_VEHICLE_VELOCITY_THRESHOLD 0
-#define MIN_WHEEL_VELOCITY_THRESHOLD   0//20.4 //rads/sec
-#define MIN_PRESSURE_THRESHOLD         70000
-#define APPLY_DELAY                    0.05
-#define PRIMARY_APPLY_RATE             /*2500000*/35000000
-#define SECONDARY_APPLY_RATE           /*250000*/3500000
-#define RELEASE_RATE                   9000000  //Pa/sec
-#define MIN_WHEEL_SPIN_ACCELERATION    -2.5//-175 //rad/sec^2
-#define MAX_WHEEL_SPIN_ACCELERATION    1//50 //rad/sec^2
-#define MAX_WHEEL_SLIP                 0.1//0.15
-#define MAX_BRAKE_PRESSURE             13000000 //Pa
+// //threshold values above which ABS is activated
+// #define MIN_VEHICLE_VELOCITY_THRESHOLD 5
+// #define MIN_WHEEL_VELOCITY_THRESHOLD   7//20.4 //rads/sec
+// #define MIN_PRESSURE_THRESHOLD         13000
+// #define APPLY_DELAY                    0.05
+// #define PRIMARY_APPLY_RATE             /*2500000*/6500000
+// #define SECONDARY_APPLY_RATE           /*250000*/650000
+// #define RELEASE_RATE                   1300000  //Pa/sec
+// #define MIN_WHEEL_SPIN_ACCELERATION    -2.5//-175 //rad/sec^2
+// #define MAX_WHEEL_SPIN_ACCELERATION    1//50 //rad/sec^2
+// #define MAX_WHEEL_SLIP                 0.2//0.15
+// #define MAX_BRAKE_PRESSURE             13000000 //Pa
 
 static float TIMER = -1;
 
