@@ -282,6 +282,7 @@ float num1slip = NULL;
 float num2slip = NULL;
 float startBrakePosition = 0;
 float startBrakeTime = 0;
+float inputPressure = 0.0f;
 
 void TDriver::Drive()
 {
@@ -343,7 +344,7 @@ void TDriver::Drive()
   //std::cout << "WHEEL 1 SPIN " << std::endl;
 
   if (!begunBraking) {
-    float inputPressure = 0.0;
+    inputPressure = 0.0;
 
     //oCar->_brakeFRCmd = 0.0;
     //oCar->_brakeFLCmd = 0.0;
@@ -361,6 +362,7 @@ void TDriver::Drive()
       startBrakePosition = oCar->_drvPos_z;
       startBrakeTime = num1time;
       std::cout << "\nstart brake at " << startBrakePosition << " at time " << num1time << "\n";
+
     }
 
     if (mSpeed < 1) { //if car has stopped (just about)
@@ -371,7 +373,9 @@ void TDriver::Drive()
     }
 
     if (begunBraking) {
-    float inputPressure = 1.0f; //0.5;
+    if (inputPressure < 1.0f) {
+      inputPressure += 0.16f; //0.5;
+    }
 
     oCar->_accelCmd = (tdble)0.0;
     oCar->_clutchCmd = (tdble) 0.0; 
