@@ -109,7 +109,7 @@ void TDriver::InitTrack(PTrack Track, PCarHandle CarHandle, PCarSettings *CarPar
   mTrack = Track;
 
   absfile.open ("ABSOUTPUT.txt");
-  absfile << "TIME REFSPEED	DELTA	BRAKE_0	BRAKE_1	BRAKE_2	BRAKE_3	WHEELSPIN_0	WHEELSPIN_1	WHEELSPIN_2	WHEELSPIN_3	WHEELSPINACC_0	WHEELSPINACC_1	WHEELSPINACC_2	WHEELSPINACC_3	WHEELSLIPACC_0	WHEELSLIPACC_1	WHEELSLIPACC_2	WHEELSLIPACC_3	WHEELSLIP_0	WHEELSLIP_1	WHEELSLIP_2	WHEELSLIP_3	PHASESTATE_0 PHASESTATE_1 PHASESTATE_2 PHASESTATE_3 OPTSLIP_0 OPTSLIP_1 OPTSLIP_2 OPTSLIP_3 MIN_VEHICLE_VELOCITY_THRESHOLD MIN_WHEEL_VELOCITY_THRESHOLD MIN_PRESSURE_THRESHOLD APPLY_DELAY PRIMARY_APPLY_RATE SECONDARY_APPLY_RATE RELEASE_RATE MIN_WHEEL_SPIN_ACCELERATION	MAX_WHEEL_SPIN_ACCELERATION	MAX_WHEEL_SLIP MAX_BRAKE_PRESSURE\n";
+  absfile << "TIME REFSPEED	DELTA	BRAKE_0	BRAKE_1	BRAKE_2	BRAKE_3	WHEELSPIN_0	WHEELSPIN_1	WHEELSPIN_2	WHEELSPIN_3	WHEELSPINACC_0	WHEELSPINACC_1	WHEELSPINACC_2	WHEELSPINACC_3	WHEELSLIPACC_0	WHEELSLIPACC_1	WHEELSLIPACC_2	WHEELSLIPACC_3	WHEELSLIP_0	WHEELSLIP_1	WHEELSLIP_2	WHEELSLIP_3	PHASESTATE_0 PHASESTATE_1 PHASESTATE_2 PHASESTATE_3 OPTSLIP_0 OPTSLIP_1 OPTSLIP_2 OPTSLIP_3 MIN_VEHICLE_VELOCITY_THRESHOLD MIN_WHEEL_VELOCITY_THRESHOLD MIN_PRESSURE_THRESHOLD APPLY_DELAY PRIMARY_APPLY_RATE SECONDARY_APPLY_RATE RELEASE_RATE MIN_WHEEL_SPIN_ACCELERATION	MAX_WHEEL_SPIN_ACCELERATION	MAX_WHEEL_SLIP MAX_BRAKE_PRESSURE NORMSLIP_0 NORMSLIP_1 NORMSLIP_2 NORMSLIP_3\n";
 
 
   // Get file handles
@@ -180,7 +180,10 @@ void TDriver::InitTrack(PTrack Track, PCarHandle CarHandle, PCarSettings *CarPar
 
   // Set initial fuel
   double distance = Situation->_totLaps * mTrack->length;
-  mFuelStart = getFuel(distance);
+  mFuelStart = 56.0; //getFuel(distance);
+
+  
+
   if (mLearning) {
     mFuelStart = 5.0;
     GfParmSetNum(*CarParmHandle, SECT_ENGINE, PRM_FUELCONS, (char*)NULL, 0.0);
@@ -280,6 +283,7 @@ extern "C" {
 #define AT __FILE__ ":" TOSTRING(__LINE__)
 
 bool begunBraking = false;
+bool endedBraking = false;
 double num1time = 0;// = oSituation->currentTime;
 double num2time = 0;// = oSituation->currentTime;
 float num1slip = NULL;
@@ -345,41 +349,50 @@ void TDriver::Drive()
   num2time = num1time;
   num1time = oSituation->currentTime;
 
-  //std::cout << "WHEEL 1 SPIN " << std::endl;
-
   if (!begunBraking) {
-    inputPressure = 0.0;
+    inputPressure = 0.0; //0.0
+
+    if (endedBraking) {
+      inputPressure = 1.0;
+    }
 
     //oCar->_brakeFRCmd = 0.0;
     //oCar->_brakeFLCmd = 0.0;
     //oCar->_brakeRRCmd = 0.0;
     //oCar->_brakeRLCmd = 0.0;
-    
+
     cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, slipAccel, num1time );
   
   } 
-  if ( strcmp(oCar->_trkPos.seg->name, "begin brake") == 0 || strcmp(oCar->_trkPos.seg->name, "straight 13") == 0 || begunBraking) {
+  if ( (strcmp(oCar->_trkPos.seg->name, "begin brake") == 0 || strcmp(oCar->_trkPos.seg->name, "straight 13") == 0 || begunBraking) && !endedBraking) {
 
     begunBraking = true;
 
     if (startBrakePosition == 0) {
-      startBrakePosition = oCar->_drvPos_z;
+      startBrakePosition = oCar->_distRaced;
       startBrakeTime = num1time;
       std::cout << "\nstart brake at " << startBrakePosition << " at time " << num1time << "\n";
 
     }
 
     if (mSpeed < 5) { //if car has stopped (just about)
-      std::cout << "stopped brake at " << oCar->_drvPos_z << " at time " << num1time << "\n";
-      std::cout << "length: " << oCar->_drvPos_z - startBrakePosition << "\n";
+      std::cout << "stopped brake at " << oCar->_distRaced << " at time " << num1time << "\n";
+      std::cout << "length: " << oCar->_distRaced - startBrakePosition << "\n";
       std::cout << "time  : " << num1time - startBrakeTime << "\n";
       begunBraking = false;
+      endedBraking = true;
     }
 
     if (begunBraking) {
-    if (inputPressure < 1.0f) {
-      inputPressure += 0.16f; //0.5;
-    }
+
+      //introduce braking incrementally 
+      if (inputPressure + 0.16f <= 1.0f) {
+        inputPressure += 0.16f; //0.5;
+      } else { //but do not exceed max pressure
+        inputPressure = 1.0f;
+      }
+
+
 
     oCar->_accelCmd = (tdble)0.0;
     oCar->_clutchCmd = (tdble) 0.0; 
@@ -427,7 +440,7 @@ void TDriver::Drive()
            << oCar->_wheelSlipOpt(0) << " "
            << oCar->_wheelSlipOpt(1) << " "
            << oCar->_wheelSlipOpt(2) << " "
-           << oCar->_wheelSlipOpt(3) << " "
+           << oCar->_wheelSlipOpt(3) << " "            
 
            << TOSTRING(MIN_VEHICLE_VELOCITY_THRESHOLD) << " "
            << TOSTRING(MIN_WHEEL_VELOCITY_THRESHOLD)   << " "
@@ -441,7 +454,43 @@ void TDriver::Drive()
            << TOSTRING(MAX_WHEEL_SLIP)                 << " "
            << TOSTRING(MAX_BRAKE_PRESSURE)             << " "
 
+           << oCar->_wheelSlipNorm(0) << " "
+           << oCar->_wheelSlipNorm(1) << " "
+           << oCar->_wheelSlipNorm(2) << " "
+           << oCar->_wheelSlipNorm(3) << " "
+
+           << oCar->_tyreEffMu(0) << " "
+           << oCar->_tyreEffMu(1) << " "
+           << oCar->_tyreEffMu(2) << " "
+           << oCar->_tyreEffMu(3) << " "
+
+           << oCar->_wheelFx(0) << " "
+           << oCar->_wheelFx(1) << " "
+           << oCar->_wheelFx(2) << " "
+           << oCar->_wheelFx(3) << " "
+
+           << oCar->_wheelFy(0) << " "
+           << oCar->_wheelFy(1) << " "
+           << oCar->_wheelFy(2) << " "
+           << oCar->_wheelFy(3) << " "
+
+           << oCar->_wheelFz(0) << " "
+           << oCar->_wheelFz(1) << " "
+           << oCar->_wheelFz(2) << " "
+           << oCar->_wheelFz(3) << " "
+
+           << oCar->priv.wheel[0].rollRes << " "
+           << oCar->priv.wheel[1].rollRes << " "
+           << oCar->priv.wheel[2].rollRes << " "
+           << oCar->priv.wheel[3].rollRes << " "
+
            << "\n";
+
+           
+           //#define _wheelFx(i)             priv.wheel[i].Fx
+           //#define _wheelFy(i)             priv.wheel[i].Fy
+           //#define _wheelFz(i)             priv.wheel[i].Fz
+           //tdble         rollRes;                /**< rolling resistance, useful for sound */
 
     }
 

@@ -21,7 +21,7 @@
 // #define MAX_WHEEL_SLIP                 0.2//0.15
 // #define MAX_BRAKE_PRESSURE             13000000 //Pa
 
-static float TIMER = -1;
+static float TIMERS[4] = {-1, -1, -1, -1};
 
 #define PI 3.14159265358979323846
 
@@ -177,12 +177,12 @@ void phase(int wheel) {
     case 3: //Reduce pressure 
       {
       //calculate how much pressure should have been released since last ABS call (deltaTime)
-      float pressureToRelease = deltaTime * RELEASE_RATE;
+      float pressureToRelease = deltaTime * RELEASE_RATE; //* 4; //REMOVE REMOVE REMOVE TESTING TESTING;
       //convert pressure to brake cmd equivalent
       float cmdReleasePressure = pressureToRelease/MAX_BRAKE_PRESSURE;
       *wheelBrakeCMD[wheel] = *wheelBrakeCMD[wheel] - cmdReleasePressure;
       
-      if (wheelSpinAcceleration[wheel] > 0) {
+      if (wheelSpinAcceleration[wheel] > MAX_WHEEL_SPIN_ACCELERATION  /*0*/) {
         phaseStates[wheel] = 4;
       }
       break;
@@ -193,20 +193,20 @@ void phase(int wheel) {
       *wheelBrakeCMD[wheel] = *wheelBrakeCMD[wheel];
 
       //IMPLEMENT delay
-      if (TIMER == -1) { //I.E. the timer has not been set yet
-        TIMER = APPLY_DELAY;
+      if (TIMERS[wheel] == -1) { //I.E. the timer has not been set yet
+        TIMERS[wheel] = APPLY_DELAY;
       } else {
-        TIMER -= deltaTime;
+        TIMERS[wheel] -= deltaTime;
       }
 
       //if apply delay has elapsed
-      if (TIMER < 0 ) {
-        TIMER = -1;
+      if (TIMERS[wheel] < 0 ) {
+        TIMERS[wheel] = -1;
         phaseStates[wheel] = 5; 
       }
 
       if (MAX_WHEEL_SPIN_ACCELERATION * 10 < wheelSpinAcceleration[wheel]) {
-        TIMER = -1;
+        TIMERS[wheel] = -1;
         phaseStates[wheel] = 5;
       }
       //until the wheel spin acceleration (positive) exceeds +A, a
@@ -221,7 +221,7 @@ void phase(int wheel) {
       //IMPLEMENT pressure increase
 
       //calculate how much pressure should have been increased since last ABS call (deltaTime)
-      float pressureToApply = deltaTime * PRIMARY_APPLY_RATE;
+      float pressureToApply = deltaTime * PRIMARY_APPLY_RATE;// * 4; //REMOVE REMOVE REMOVE TESTING TESTING;
       //convert pressure to brake cmd equivalent
       float cmdApplyPressure = pressureToApply/MAX_BRAKE_PRESSURE;
       *wheelBrakeCMD[wheel] = *wheelBrakeCMD[wheel] + cmdApplyPressure;
@@ -238,22 +238,22 @@ void phase(int wheel) {
       *wheelBrakeCMD[wheel] = *wheelBrakeCMD[wheel];
 
       //IMPLEMENT delay
-      if (TIMER == -1) { //I.E. the timer has not been set yet
-        TIMER = APPLY_DELAY;
+      if (TIMERS[wheel] == -1) { //I.E. the timer has not been set yet
+        TIMERS[wheel] = APPLY_DELAY;
       } else {
-        TIMER -= deltaTime;
+        TIMERS[wheel] -= deltaTime;
       }
 
       //if apply delay has elapsed
-      if (TIMER < 0 ) {
-        TIMER = -1;
+      if (TIMERS[wheel] < 0 ) {
+        TIMERS[wheel] = -1;
         phaseStates[wheel] = 7; 
       }
 
       //until wheel angular acceleration again exceeds the Wheel Minimum Wheel Spin Acceleration (negative)
       //if wheel spin acceleration threshold is surpassed, continue to phase 7
       if (MIN_WHEEL_SPIN_ACCELERATION > wheelSpinAcceleration[wheel]) {
-        TIMER = -1;
+        TIMERS[wheel] = -1;
         phaseStates[wheel] = 7;
       }
 
@@ -262,26 +262,32 @@ void phase(int wheel) {
     case 7: //Increase pressure
       {
       //calculate how much pressure should have been increased since last ABS call (deltaTime)
-      float pressureToApply = deltaTime * SECONDARY_APPLY_RATE;
+      float pressureToApply = deltaTime * SECONDARY_APPLY_RATE;// * 4; //REMOVE REMOVE REMOVE TESTING TESTING
       //convert pressure to brake cmd equivalent
       float cmdApplyPressure = pressureToApply/MAX_BRAKE_PRESSURE;
-      *wheelBrakeCMD[wheel] = *wheelBrakeCMD[wheel] + cmdApplyPressure;
+
+      if (*wheelBrakeCMD[wheel] >= 1.0f) {
+        *wheelBrakeCMD[wheel] = 1.0f;
+      } else {
+        *wheelBrakeCMD[wheel] = *wheelBrakeCMD[wheel] + cmdApplyPressure;
+      }
 
       //until wheel angular acceleration drops below the Wheel Minimum Angular Acceleration (negative)
       if (MIN_WHEEL_SPIN_ACCELERATION > wheelSpinAcceleration[wheel]) {
-        phaseStates[wheel] = 8;
+        phaseStates[wheel] = 3;//8;
       }
     
       break; 
       }
-    case 8: //Reduce pressure (a cycle is complete, return to phase 3)
-      {
-      phaseStates[wheel] = 3;
-      break;
+    //case 8: //Reduce pressure (a cycle is complete, return to phase 3)
+    //  {
+    //  phaseStates[wheel] = 3;
+    //  break;
   
     default : 
-      printf("ABS state error\n");
-      break;
+      {
+        printf("ABS state error\n");
+        break;
       }
   }
 }
