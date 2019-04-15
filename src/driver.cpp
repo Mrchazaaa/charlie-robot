@@ -335,7 +335,7 @@ void TDriver::Drive()
   //UPDATE GEARS/CLUTCH
 
   //CONTROL SPEED 
-  double targetspeedkph = 150.0;
+  double targetspeedkph = 150;//150.0;
   double targetspeed = targetspeedkph/3.6;
   controlSpeed(mAccel, targetspeed);
   mSpeed = oCar->_speed_x;
@@ -353,7 +353,7 @@ void TDriver::Drive()
     inputPressure = 0.0; //0.0
 
     if (endedBraking) {
-      inputPressure = 1.0;
+      inputPressure = 0.0;
     }
 
     //oCar->_brakeFRCmd = 0.0;
@@ -361,7 +361,7 @@ void TDriver::Drive()
     //oCar->_brakeRRCmd = 0.0;
     //oCar->_brakeRLCmd = 0.0;
 
-    cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, slipAccel, num1time );
+    cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, slipAccel, num1time, mSpeed );
   
   } 
   if ( (strcmp(oCar->_trkPos.seg->name, "begin brake") == 0 || strcmp(oCar->_trkPos.seg->name, "straight 13") == 0 || begunBraking) && !endedBraking) {
@@ -375,7 +375,7 @@ void TDriver::Drive()
 
     }
 
-    if (mSpeed < 5) { //if car has stopped (just about)
+    if (mSpeed < 20) { //if car has stopped (just about)
       std::cout << "stopped brake at " << oCar->_distRaced << " at time " << num1time << "\n";
       std::cout << "length: " << oCar->_distRaced - startBrakePosition << "\n";
       std::cout << "time  : " << num1time - startBrakeTime << "\n";
@@ -386,18 +386,21 @@ void TDriver::Drive()
     if (begunBraking) {
 
       //introduce braking incrementally 
-      if (inputPressure + 0.16f <= 1.0f) {
-        inputPressure += 0.16f; //0.5;
+      float increaseRate = 0.42f; //0.16f
+      float upperBrakeLimit = 0.8f;
+      if (inputPressure + increaseRate <= upperBrakeLimit) {
+       inputPressure += increaseRate; //0.5;
       } else { //but do not exceed max pressure
-        inputPressure = 1.0f;
+       inputPressure = upperBrakeLimit;
       }
+      
 
 
 
     oCar->_accelCmd = (tdble)0.0;
     oCar->_clutchCmd = (tdble) 0.0; 
 
-    cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, slipAccel, num1time );
+    cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, slipAccel, num1time, mSpeed );
 
     //absfile << "hello \n";
 
@@ -494,39 +497,14 @@ void TDriver::Drive()
 
     }
 
-    //std::cout << "NOT BRAKING" << std::endl;
     
   }
 
-  //CONTROL BRAKING
+  //std::cout << "mass is: " << GfParmGetNum(oCar->_carHandle, SECT_CAR, PRM_MASS, NULL, 100.0) << std::endl;
 
-  //PRINT DEBUG INFO
-  //std::system("clear;");
-
-  //num2time = num1time;
-  //num1time = oSituation->currentTime;
-
-  //num2slip = num1slip; 
-  //num1slip = (oCar->_speed_x - 0.159155 * *wheelSpinVelocity[0] * 2 * PI *  0.3179 )/ oCar->_speed_x;
-
-
-
-  if (num2time != NULL) {
-    //double deltaTime = num1time - num2time;
-     
-     
-    //double mySlipAccel = (num2slip - num1slip) / (num2time - num1time);
-    
-    //std::cout << "delta is: " << deltaTime << std::endl;
-    //std::cout << "wheel1 slip accel is: " << oCar->_wheelSlipAccel(0) << std::endl;
-  }
-
-  //std::cout << oCar->_wheelRadius(0) << std::endl;
-
-
-  if (begunBraking) {
-    //std::cout << "BRAKING" << std::endl;
-  }
+  //std::cout << "engine tq: " << GfParmGetNum(oCar->_carHandle, SECT_ENGINE, PRM_TQ, NULL, 0.0) << std::endl;
+  
+  //oCar->_enginerpmMaxTq << std::endl;
 
   //PRINT DEBUG INFO
 
