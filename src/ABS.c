@@ -110,6 +110,7 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
       } else {
         //if wheel velocity is not exceeded, turn off ABS for that wheel
         phaseStates[i] = OFF;
+        MAX_WHEEL_SLIP[i] = INITIAL_MAX_WHEEL_SLIP;
       }
     }
   } else { //if thresholds are not met, turn off ABS
@@ -119,6 +120,11 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
     phaseStates[1] = OFF;
     phaseStates[2] = OFF;
     phaseStates[3] = OFF;
+
+    MAX_WHEEL_SLIP[0] = INITIAL_MAX_WHEEL_SLIP;
+    MAX_WHEEL_SLIP[1] = INITIAL_MAX_WHEEL_SLIP;
+    MAX_WHEEL_SLIP[2] = INITIAL_MAX_WHEEL_SLIP;
+    MAX_WHEEL_SLIP[3] = INITIAL_MAX_WHEEL_SLIP;
 
     lastTimeStamp = 0;
 
@@ -157,11 +163,10 @@ void phase(int wheel, float inputPressure) {
       *wheelBrakeCMD[wheel] = *wheelBrakeCMD[wheel];
 
       //when the tire longitudinal slip exceeds the slip associated with the Slip Threshold, continue to phase 3
-      if (wheelSlip[wheel] > MAX_WHEEL_SLIP) {
+      if (wheelSlip[wheel] > MAX_WHEEL_SLIP[wheel]) {
         
-        //IMPLEMENT
         //current tire slip is stored and used as the slip threshold criterion in later phases
-        //#define MAX_WHEEL_SLIP wheelSlip[wheel];
+        MAX_WHEEL_SLIP[wheel] = wheelSlip[wheel];
 
         phaseStates[wheel] = 3;
       }

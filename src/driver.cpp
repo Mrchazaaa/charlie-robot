@@ -394,14 +394,11 @@ void TDriver::Drive()
       } else { //but do not exceed max pressure
        inputPressure = upperBrakeLimit;
       }
-      
-
-
 
     oCar->_accelCmd = (tdble)0.0;
     oCar->_clutchCmd = (tdble) 0.0; 
 
-    cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, slipAccel, num1time, mSpeed );
+    cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, num1time, mSpeed );
 
     //absfile << "hello \n";
 

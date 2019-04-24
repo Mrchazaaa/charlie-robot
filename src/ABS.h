@@ -18,7 +18,8 @@
 #define RELEASE_RATE                   50000000 //Pa/Sec
 #define MIN_WHEEL_SPIN_ACCELERATION    -95      //Met/Sec^2
 #define MAX_WHEEL_SPIN_ACCELERATION    0        //Met/Sec^2
-#define MAX_WHEEL_SLIP                 0.1 
+#define INITIAL_MAX_WHEEL_SLIP         0.1 
+static float MAX_WHEEL_SLIP[] = {INITIAL_MAX_WHEEL_SLIP, INITIAL_MAX_WHEEL_SLIP, INITIAL_MAX_WHEEL_SLIP, INITIAL_MAX_WHEEL_SLIP};
 #define MAX_BRAKE_PRESSURE             13000000 //Pa
 #define WHEEL_RADIUS_STATIC            0.3179f  //Met
 
