@@ -53,6 +53,3 @@ void cycleTCS( float newInputAccel, float *accelCmd, float *newWheelSpinVelocity
 
   return;
 }
-
-
-}

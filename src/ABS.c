@@ -3,15 +3,6 @@
 
 #define OFF 0 //state used to represent that ABS is non-active on selected wheels
 
-//getter functions that allow main system to see variables calculated by ABS (USED IN DEBUGGING) 
-int   getPhaseStates(int index) { return phaseStates[index]; }
-float getWheelSpinVelocity(int index) { return wheelSpinVelocity[index]; }
-float getWheelSpinAcceleration(int index) { return wheelSpinAcceleration[index]; }
-float getWheelSlipAcceleration(int index) { return wheelSlipAcceleration[index]; }
-float getWheelSlip(int index) { return wheelSlip[index]; }
-float getDeltaTime() { return deltaTime; }
-float getVehicleSpeed() { return vehicleSpeed; }
-
 static float TIMERS[4] = {-1, -1, -1, -1}; //timer for each wheel (-1 indicates that the timer is not being used)
 static int phaseStates[4] = {OFF, OFF, OFF, OFF}; //used to remember which state the ABS algorithm is currently in (one for each wheel) 
 
@@ -23,6 +14,15 @@ static float wheelSlip[4] = {0, 0, 0, 0};
 static float lastTimeStamp = 0; //store the last time that ABS was called
 static float deltaTime = 0; //time since last ABS call
 static float vehicleSpeed;
+
+//getter functions that allow main system to see variables calculated by ABS (USED IN DEBUGGING) 
+int   getPhaseStates(int index) { return phaseStates[index]; }
+float getWheelSpinVelocity(int index) { return wheelSpinVelocity[index]; }
+float getWheelSpinAcceleration(int index) { return wheelSpinAcceleration[index]; }
+float getWheelSlipAcceleration(int index) { return wheelSlipAcceleration[index]; }
+float getWheelSlip(int index) { return wheelSlip[index]; }
+float getDeltaTime() { return deltaTime; }
+float getVehicleSpeed() { return vehicleSpeed; }
 
 //used to determine reference speed of vehicle (just use fastest wheel speed, may need to update this...)
 float maxWheelVelocity(float wheelVelocity[4]) {
@@ -39,7 +39,7 @@ float maxWheelVelocity(float wheelVelocity[4]) {
   return maxVelocity;
 }
 
-void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVelocity[4], float *newWheelSlipAcceleration[4], float newTimeStamp, float refSpeed )
+void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVelocity[4], float newTimeStamp, float refSpeed )
 {
   //if this is the first time that ABS has been called
   if (lastTimeStamp == 0) { 
@@ -60,6 +60,11 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
 
   //IMPLEMENT
   //need to add code to accurately calculate current wheel velocity (not just using system calc)
+  //printf("speed syst: %.6f \n", refSpeed);
+  //printf("speed mine: %.6f \n", *newWheelSpinVelocity[0] * velocityConst);
+  //printf("speed syst: %.6f %.6f \n", refSpeed, *newWheelSpinVelocity[0] * velocityConst);
+  //printf("speed syst: %.6f %.6f \n", refSpeed, ((*newWheelSpinVelocity[0] * velocityConst) + (*newWheelSpinVelocity[1] * velocityConst) + (*newWheelSpinVelocity[2] * velocityConst) + (*newWheelSpinVelocity[3] * velocityConst) )/4 );
+  printf("speed syst: %.6f %.6f \n", refSpeed, ((*newWheelSpinVelocity[FL] * velocityConst) + (*newWheelSpinVelocity[FR] * velocityConst) )/2 );
 
   //update wheel acceleration values
   wheelSpinAcceleration[0] = ((*newWheelSpinVelocity[0] * velocityConst) - wheelSpinVelocity[0])/deltaTime;
@@ -74,22 +79,20 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
   wheelSpinVelocity[3] = *newWheelSpinVelocity[3] * velocityConst;
 
   //IMPLEMENT
-  //update wheel slip acceleration (create custom ways to calc for wheel slip acceleration)
-  wheelSlipAcceleration[0] = *newWheelSlipAcceleration[0];
-  wheelSlipAcceleration[1] = *newWheelSlipAcceleration[1];
-  wheelSlipAcceleration[2] = *newWheelSlipAcceleration[2];
-  wheelSlipAcceleration[3] = *newWheelSlipAcceleration[3];
-
-  //IMPLEMENT
   //calculate vehicle speed (just use fastest wheel method or come up with new calc method)
   vehicleSpeed = refSpeed;//maxWheelVelocity(wheelSpinVelocity);
+
+  //update wheel slip acceleration
+  wheelSlipAcceleration[0] = (((vehicleSpeed - wheelSpinVelocity[0]) / vehicleSpeed) - wheelSlip[0])/deltaTime;
+  wheelSlipAcceleration[1] = (((vehicleSpeed - wheelSpinVelocity[1]) / vehicleSpeed) - wheelSlip[1])/deltaTime;
+  wheelSlipAcceleration[2] = (((vehicleSpeed - wheelSpinVelocity[2]) / vehicleSpeed) - wheelSlip[2])/deltaTime;
+  wheelSlipAcceleration[3] = (((vehicleSpeed - wheelSpinVelocity[3]) / vehicleSpeed) - wheelSlip[3])/deltaTime;
 
   //update wheel slip values
   wheelSlip[0] = (vehicleSpeed - wheelSpinVelocity[0]) / vehicleSpeed;
   wheelSlip[1] = (vehicleSpeed - wheelSpinVelocity[1]) / vehicleSpeed;
   wheelSlip[2] = (vehicleSpeed - wheelSpinVelocity[2]) / vehicleSpeed;
   wheelSlip[3] = (vehicleSpeed - wheelSpinVelocity[3]) / vehicleSpeed; 
-  
   
   lastTimeStamp = newTimeStamp;
  

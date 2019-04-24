@@ -335,7 +335,8 @@ void TDriver::Drive()
   //UPDATE GEARS/CLUTCH
 
   //CONTROL SPEED 
-  double targetspeedkph = 150;//150.0;
+  //convert from target speed (specified in km/h) to m/s (as used by speed dreams)
+  double targetspeedkph = 150;
   double targetspeed = targetspeedkph/3.6;
   controlSpeed(mAccel, targetspeed);
   mSpeed = oCar->_speed_x;
@@ -361,7 +362,7 @@ void TDriver::Drive()
     //oCar->_brakeRRCmd = 0.0;
     //oCar->_brakeRLCmd = 0.0;
 
-    cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, slipAccel, num1time, mSpeed );
+    cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, num1time, mSpeed );
   
   } 
   if ( (strcmp(oCar->_trkPos.seg->name, "begin brake") == 0 || strcmp(oCar->_trkPos.seg->name, "straight 13") == 0 || begunBraking) && !endedBraking) {

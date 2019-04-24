@@ -31,6 +31,6 @@
  void phase(int wheel, float inputPressure) ;
  float getVehicleSpeed() ;
 
- void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVelocity[4], float *newWheelSlipAcceleration[4], float newTimeStamp, float refSpeed );
+ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVelocity[4], float newTimeStamp, float refSpeed );
 
  #endif
