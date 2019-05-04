@@ -4,6 +4,7 @@
 src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.o
  /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/ABS.c
  /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/ABS.h
+ /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/velocity_EKF.h
 src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ClothoidPath.cpp.o
  /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/ClothoidPath.cpp
  /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/ClothoidPath.h
@@ -228,3 +229,8 @@ src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/pit.cpp.o
 src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/spline.cpp.o
  /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/spline.cpp
  /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/spline.h
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o
+ /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/tiny_ekf.h
+ /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/tinyekf_config.h
+ /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/velocity_EKF.cpp
+ /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/velocity_EKF.h

@@ -11,6 +11,10 @@ stdio.h
 -
 ABS.h
 /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/ABS.h
+velocity_estimator/velocity_EKF.h
+/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/velocity_EKF.h
 
 /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/ABS.h
+
+/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/velocity_EKF.h
 

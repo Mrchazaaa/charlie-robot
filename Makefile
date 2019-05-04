@@ -544,6 +544,33 @@ src/spline.cpp.s:
 	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/spline.cpp.s
 .PHONY : src/spline.cpp.s
 
+src/velocity_estimator/velocity_EKF.o: src/velocity_estimator/velocity_EKF.cpp.o
+
+.PHONY : src/velocity_estimator/velocity_EKF.o
+
+# target to build an object file
+src/velocity_estimator/velocity_EKF.cpp.o:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o
+.PHONY : src/velocity_estimator/velocity_EKF.cpp.o
+
+src/velocity_estimator/velocity_EKF.i: src/velocity_estimator/velocity_EKF.cpp.i
+
+.PHONY : src/velocity_estimator/velocity_EKF.i
+
+# target to preprocess a source file
+src/velocity_estimator/velocity_EKF.cpp.i:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.i
+.PHONY : src/velocity_estimator/velocity_EKF.cpp.i
+
+src/velocity_estimator/velocity_EKF.s: src/velocity_estimator/velocity_EKF.cpp.s
+
+.PHONY : src/velocity_estimator/velocity_EKF.s
+
+# target to generate assembly for a file
+src/velocity_estimator/velocity_EKF.cpp.s:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.s
+.PHONY : src/velocity_estimator/velocity_EKF.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -598,6 +625,9 @@ help:
 	@echo "... src/spline.o"
 	@echo "... src/spline.i"
 	@echo "... src/spline.s"
+	@echo "... src/velocity_estimator/velocity_EKF.o"
+	@echo "... src/velocity_estimator/velocity_EKF.i"
+	@echo "... src/velocity_estimator/velocity_EKF.s"
 .PHONY : help
 
 

@@ -1,5 +1,10 @@
 INCLUDE(../../../cmake/macros.cmake)
 
+# INCLUDE(/src/drivers/charlierobot/src/velocity_estimator/eigen-git-mirror)
+# INCLUDE(/src/drivers/charlierobot/src/velocity_estimator/autodiff)
+
+set(CMAKE_CXX_STANDARD 17)
+
 SET(ROBOT_NAME "charlierobot")
 
 SET(ROBOT_INTERFACE LEGACY WELCOME)
@@ -35,6 +40,8 @@ SET(ROBOT_SOURCES
     src/Vec3d.h
     src/ABS.c
     src/ABS.h
+    src/velocity_estimator/velocity_EKF.cpp
+    src/velocity_estimator/velocity_EKF.h
 )
 
 

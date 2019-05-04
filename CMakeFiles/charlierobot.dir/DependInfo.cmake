@@ -49,6 +49,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/pidcontroller.cpp" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/pidcontroller.cpp.o"
   "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/pit.cpp" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/pit.cpp.o"
   "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/spline.cpp" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/spline.cpp.o"
+  "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/velocity_EKF.cpp" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

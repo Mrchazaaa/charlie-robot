@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "ABS.h"
+#include "velocity_estimator/velocity_EKF.h"
 
 #define OFF 0 //state used to represent that ABS is non-active on selected wheels
 
@@ -14,6 +15,7 @@ static float wheelSlip[4] = {0, 0, 0, 0};
 static float lastTimeStamp = 0; //store the last time that ABS was called
 static float deltaTime = 0; //time since last ABS call
 static float vehicleSpeed;
+static int   ekfIsActive; //indicates whether the ekf needs to be initialized again
 
 //getter functions that allow main system to see variables calculated by ABS (USED IN DEBUGGING) 
 int   getPhaseStates(int index) { return phaseStates[index]; }
@@ -39,10 +41,12 @@ float maxWheelVelocity(float wheelVelocity[4]) {
   return maxVelocity;
 }
 
-void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVelocity[4], float newTimeStamp, float refSpeed )
+void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVelocity[4], float newTimeStamp/*, float refSpeed */)
 {
   //if this is the first time that ABS has been called
   if (lastTimeStamp == 0) { 
+    ekfIsActive = 0;
+
     //set the last time stamp to now
     lastTimeStamp = newTimeStamp;
     //update pointers to brake command variables 
@@ -55,32 +59,37 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
   //calculate time since last ABS call
   deltaTime = newTimeStamp - lastTimeStamp;
 
-  //wheel1 spinvel is: 0.159155 * *wheelSpinVelocity[0] * 2 * PI * oCar->_wheelRadius(0)
-  float velocityConst = 0.159155 * 2 * PI * WHEEL_RADIUS_STATIC; 
-
   //IMPLEMENT
   //need to add code to accurately calculate current wheel velocity (not just using system calc)
   //printf("speed syst: %.6f \n", refSpeed);
-  //printf("speed mine: %.6f \n", *newWheelSpinVelocity[0] * velocityConst);
-  //printf("speed syst: %.6f %.6f \n", refSpeed, *newWheelSpinVelocity[0] * velocityConst);
-  //printf("speed syst: %.6f %.6f \n", refSpeed, ((*newWheelSpinVelocity[0] * velocityConst) + (*newWheelSpinVelocity[1] * velocityConst) + (*newWheelSpinVelocity[2] * velocityConst) + (*newWheelSpinVelocity[3] * velocityConst) )/4 );
-  printf("speed syst: %.6f %.6f \n", refSpeed, ((*newWheelSpinVelocity[FL] * velocityConst) + (*newWheelSpinVelocity[FR] * velocityConst) )/2 );
+  //printf("speed mine: %.6f \n", *newWheelSpinVelocity[0] * WHEEL_RADIUS_STATIC);
+  //printf("speed syst: %.6f %.6f \n", refSpeed, *newWheelSpinVelocity[0] * WHEEL_RADIUS_STATIC);
+  //printf("speed syst: %.6f %.6f \n", refSpeed, ((*newWheelSpinVelocity[0] * WHEEL_RADIUS_STATIC) + (*newWheelSpinVelocity[1] * WHEEL_RADIUS_STATIC) + (*newWheelSpinVelocity[2] * WHEEL_RADIUS_STATIC) + (*newWheelSpinVelocity[3] * WHEEL_RADIUS_STATIC) )/4 );
+  //printf("speed syst: %.6f %.6f \n", refSpeed, ((*newWheelSpinVelocity[FL] * WHEEL_RADIUS_STATIC) + (*newWheelSpinVelocity[FR] * WHEEL_RADIUS_STATIC) )/2 );
 
   //update wheel acceleration values
-  wheelSpinAcceleration[0] = ((*newWheelSpinVelocity[0] * velocityConst) - wheelSpinVelocity[0])/deltaTime;
-  wheelSpinAcceleration[1] = ((*newWheelSpinVelocity[1] * velocityConst) - wheelSpinVelocity[1])/deltaTime;
-  wheelSpinAcceleration[2] = ((*newWheelSpinVelocity[2] * velocityConst) - wheelSpinVelocity[2])/deltaTime;
-  wheelSpinAcceleration[3] = ((*newWheelSpinVelocity[3] * velocityConst) - wheelSpinVelocity[3])/deltaTime;
+  wheelSpinAcceleration[0] = ((*newWheelSpinVelocity[0] * WHEEL_RADIUS_STATIC) - wheelSpinVelocity[0])/deltaTime;
+  wheelSpinAcceleration[1] = ((*newWheelSpinVelocity[1] * WHEEL_RADIUS_STATIC) - wheelSpinVelocity[1])/deltaTime;
+  wheelSpinAcceleration[2] = ((*newWheelSpinVelocity[2] * WHEEL_RADIUS_STATIC) - wheelSpinVelocity[2])/deltaTime;
+  wheelSpinAcceleration[3] = ((*newWheelSpinVelocity[3] * WHEEL_RADIUS_STATIC) - wheelSpinVelocity[3])/deltaTime;
   
   //update wheel spin velocity
-  wheelSpinVelocity[0] = *newWheelSpinVelocity[0] * velocityConst;
-  wheelSpinVelocity[1] = *newWheelSpinVelocity[1] * velocityConst;
-  wheelSpinVelocity[2] = *newWheelSpinVelocity[2] * velocityConst;
-  wheelSpinVelocity[3] = *newWheelSpinVelocity[3] * velocityConst;
+  wheelSpinVelocity[0] = *newWheelSpinVelocity[0] * WHEEL_RADIUS_STATIC;
+  wheelSpinVelocity[1] = *newWheelSpinVelocity[1] * WHEEL_RADIUS_STATIC;
+  wheelSpinVelocity[2] = *newWheelSpinVelocity[2] * WHEEL_RADIUS_STATIC;
+  wheelSpinVelocity[3] = *newWheelSpinVelocity[3] * WHEEL_RADIUS_STATIC;
 
   //IMPLEMENT
   //calculate vehicle speed (just use fastest wheel method or come up with new calc method)
-  vehicleSpeed = refSpeed;//maxWheelVelocity(wheelSpinVelocity);
+  if (ekfIsActive == 0) {
+    vehicleSpeed = (*newWheelSpinVelocity[FL] * WHEEL_RADIUS_STATIC + *newWheelSpinVelocity[FR] * WHEEL_RADIUS_STATIC )/2;//refSpeed;//maxWheelVelocity(wheelSpinVelocity);
+  }
+   
+  if (ekfIsActive == 1) {
+    double frontAngularSpeed = (*newWheelSpinVelocity[FR] + *newWheelSpinVelocity[FL]) / 2;
+    double rearAngularSpeed = (*newWheelSpinVelocity[RR] + *newWheelSpinVelocity[RL]) / 2;
+    vehicleSpeed = ekf_step( 0, frontAngularSpeed, rearAngularSpeed );
+  }
 
   //update wheel slip acceleration
   wheelSlipAcceleration[0] = (((vehicleSpeed - wheelSpinVelocity[0]) / vehicleSpeed) - wheelSlip[0])/deltaTime;
@@ -99,14 +108,21 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
   //only activate ABS if threshold values are exceeded
   if ( vehicleSpeed > MIN_VEHICLE_VELOCITY_THRESHOLD 
      && newInputPressure > MIN_PRESSURE_THRESHOLD/MAX_BRAKE_PRESSURE ) {
-    
+
     //activate ABS for individual wheels whos velocity thresholds are exceeded
     int i;
     for ( i = 0 ; i < 4 ; i++ )
     {
+      printf("is ekf on? %.6f %.6f %.6f %.6f %.6f \n", ekfIsActive, vehicleSpeed, newTimeStamp, (*newWheelSpinVelocity[FL] + *newWheelSpinVelocity[FR])/2, (*newWheelSpinVelocity[FR] + *newWheelSpinVelocity[RL])/2);
       if ( wheelSpinVelocity[i] > MIN_WHEEL_VELOCITY_THRESHOLD ) {
         //loop over control algorithm for wheel i
         phase(i, newInputPressure);
+        
+        if (ekfIsActive == 0) { //if ekf needs to be initialised, initialise it
+          ekf_start(vehicleSpeed); 
+          ekfIsActive = 1;
+        }
+
       } else {
         //if wheel velocity is not exceeded, turn off ABS for that wheel
         phaseStates[i] = OFF;
