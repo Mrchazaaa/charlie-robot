@@ -13,6 +13,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/charlierobot.dir/src/Utils.cpp.o"
   "CMakeFiles/charlierobot.dir/src/ABS.c.o"
   "CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o"
+  "CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o"
   "../../../lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.pdb"
   "../../../lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.so"
 )

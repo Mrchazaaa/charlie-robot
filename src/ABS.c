@@ -88,7 +88,7 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
   if (ekfIsActive == 1) {
     double frontAngularSpeed = (*newWheelSpinVelocity[FR] + *newWheelSpinVelocity[FL]) / 2;
     double rearAngularSpeed = (*newWheelSpinVelocity[RR] + *newWheelSpinVelocity[RL]) / 2;
-    vehicleSpeed = ekf_step( 0, frontAngularSpeed, rearAngularSpeed );
+    vehicleSpeed = step_ekf( 0, frontAngularSpeed, rearAngularSpeed );
   }
 
   //update wheel slip acceleration
@@ -105,6 +105,8 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
   
   lastTimeStamp = newTimeStamp;
  
+  printf("is ekf on? %d %.6f %.6f %.6f %.6f \n", ekfIsActive, vehicleSpeed, newTimeStamp, (*newWheelSpinVelocity[FL] + *newWheelSpinVelocity[FR])/2, (*newWheelSpinVelocity[FR] + *newWheelSpinVelocity[RL])/2);
+
   //only activate ABS if threshold values are exceeded
   if ( vehicleSpeed > MIN_VEHICLE_VELOCITY_THRESHOLD 
      && newInputPressure > MIN_PRESSURE_THRESHOLD/MAX_BRAKE_PRESSURE ) {
@@ -113,13 +115,14 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
     int i;
     for ( i = 0 ; i < 4 ; i++ )
     {
-      printf("is ekf on? %.6f %.6f %.6f %.6f %.6f \n", ekfIsActive, vehicleSpeed, newTimeStamp, (*newWheelSpinVelocity[FL] + *newWheelSpinVelocity[FR])/2, (*newWheelSpinVelocity[FR] + *newWheelSpinVelocity[RL])/2);
+      
       if ( wheelSpinVelocity[i] > MIN_WHEEL_VELOCITY_THRESHOLD ) {
         //loop over control algorithm for wheel i
         phase(i, newInputPressure);
         
         if (ekfIsActive == 0) { //if ekf needs to be initialised, initialise it
-          ekf_start(vehicleSpeed); 
+          start_ekf(vehicleSpeed); 
+
           ekfIsActive = 1;
         }
 

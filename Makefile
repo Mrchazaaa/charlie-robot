@@ -544,6 +544,33 @@ src/spline.cpp.s:
 	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/spline.cpp.s
 .PHONY : src/spline.cpp.s
 
+src/velocity_estimator/tiny_ekf.o: src/velocity_estimator/tiny_ekf.c.o
+
+.PHONY : src/velocity_estimator/tiny_ekf.o
+
+# target to build an object file
+src/velocity_estimator/tiny_ekf.c.o:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o
+.PHONY : src/velocity_estimator/tiny_ekf.c.o
+
+src/velocity_estimator/tiny_ekf.i: src/velocity_estimator/tiny_ekf.c.i
+
+.PHONY : src/velocity_estimator/tiny_ekf.i
+
+# target to preprocess a source file
+src/velocity_estimator/tiny_ekf.c.i:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.i
+.PHONY : src/velocity_estimator/tiny_ekf.c.i
+
+src/velocity_estimator/tiny_ekf.s: src/velocity_estimator/tiny_ekf.c.s
+
+.PHONY : src/velocity_estimator/tiny_ekf.s
+
+# target to generate assembly for a file
+src/velocity_estimator/tiny_ekf.c.s:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.s
+.PHONY : src/velocity_estimator/tiny_ekf.c.s
+
 src/velocity_estimator/velocity_EKF.o: src/velocity_estimator/velocity_EKF.cpp.o
 
 .PHONY : src/velocity_estimator/velocity_EKF.o
@@ -625,6 +652,9 @@ help:
 	@echo "... src/spline.o"
 	@echo "... src/spline.i"
 	@echo "... src/spline.s"
+	@echo "... src/velocity_estimator/tiny_ekf.o"
+	@echo "... src/velocity_estimator/tiny_ekf.i"
+	@echo "... src/velocity_estimator/tiny_ekf.s"
 	@echo "... src/velocity_estimator/velocity_EKF.o"
 	@echo "... src/velocity_estimator/velocity_EKF.i"
 	@echo "... src/velocity_estimator/velocity_EKF.s"

@@ -42,6 +42,11 @@ SET(ROBOT_SOURCES
     src/ABS.h
     src/velocity_estimator/velocity_EKF.cpp
     src/velocity_estimator/velocity_EKF.h
+    src/velocity_estimator/tiny_ekf.c
+    src/velocity_estimator/tiny_ekf.h
+    src/velocity_estimator/tinyekf_config.h
+    src/velocity_estimator/TinyEKF.h
+    src/velocity_estimator/tiny_ekf_struct.h
 )
 
 

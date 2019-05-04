@@ -3,7 +3,12 @@
 
 src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.o: src/drivers/charlierobot/src/ABS.c
 src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.o: src/drivers/charlierobot/src/ABS.h
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.o: src/drivers/charlierobot/src/velocity_estimator/tiny_ekf.h
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.o: src/drivers/charlierobot/src/velocity_estimator/tinyekf_config.h
 src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.o: src/drivers/charlierobot/src/velocity_estimator/velocity_EKF.h
+
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o: src/drivers/charlierobot/src/velocity_estimator/tiny_ekf.c
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o: src/drivers/charlierobot/src/velocity_estimator/tiny_ekf.h
 
 src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ClothoidPath.cpp.o: src/drivers/charlierobot/src/ClothoidPath.cpp
 src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ClothoidPath.cpp.o: src/drivers/charlierobot/src/ClothoidPath.h

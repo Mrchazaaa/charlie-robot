@@ -286,8 +286,8 @@ bool begunBraking = false;
 bool endedBraking = false;
 double num1time = 0;// = oSituation->currentTime;
 double num2time = 0;// = oSituation->currentTime;
-float num1slip = NULL;
-float num2slip = NULL;
+/* float num1slip = NULL; */
+/* float num2slip = NULL; */
 float startBrakePosition = 0;
 float startBrakeTime = 0;
 float inputPressure = 0.0f;
