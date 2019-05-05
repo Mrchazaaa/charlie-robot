@@ -782,7 +782,7 @@ double TDriver::getSteer()
 
 int TDriver::getGear()
 {
-  const double SHIFT_UP = 0.99;          // [-] (% of rpmredline)
+  const double SHIFT_UP = 0.95;          // [-] (% of rpmredline)
   const double SHIFT_DOWN_MARGIN = 130.0;    // [rad/s] down from rpmredline
   int shifttime = 5;
   const int MAX_GEAR = oCar->_gearNb - 1;

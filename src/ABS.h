@@ -19,7 +19,7 @@
 #define SECONDARY_APPLY_RATE           8458000  //Pa/Sec
 #define RELEASE_RATE                   50000000 //Pa/Sec
 #define MIN_WHEEL_SPIN_ACCELERATION    -95      //Met/Sec^2
-#define MAX_WHEEL_SPIN_ACCELERATION    0        //Met/Sec^2
+#define MAX_WHEEL_SPIN_ACCELERATION    20//0        //Met/Sec^2
 #define INITIAL_MAX_WHEEL_SLIP         0.1      //norm wheel slip
 static float MAX_WHEEL_SLIP[] = {INITIAL_MAX_WHEEL_SLIP,
                                  INITIAL_MAX_WHEEL_SLIP, 
@@ -37,6 +37,6 @@ static float MAX_WHEEL_SLIP[] = {INITIAL_MAX_WHEEL_SLIP,
  void phase(int wheel, float inputPressure) ;
  float getVehicleSpeed() ;
 
- void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVelocity[4], float newTimeStamp);
+ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVelocity[4], float newTimeStamp );
 
  #endif
