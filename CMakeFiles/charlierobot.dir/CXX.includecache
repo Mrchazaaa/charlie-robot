@@ -275,8 +275,6 @@ fstream
 -
 string
 -
-Eigen/Core
-/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/Eigen/Core
 Eigen/LU
 /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/Eigen/LU
 autodiff/forward.hpp

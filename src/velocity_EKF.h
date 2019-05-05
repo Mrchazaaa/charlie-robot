@@ -1,6 +1,6 @@
 
 #ifdef __cplusplus
-// EKF include
+// Tiny_EKF include
 extern "C" {
   #include "tinyekf_config.h"
   #include "tiny_ekf.h"
@@ -11,8 +11,8 @@ extern "C" {
 #include <fstream>
 #include <string>
 using namespace std;
-// Eigen includes
-#include "Eigen/Core"
+// Eigen3 includes
+//#include "Eigen/Core.h"
 #include "Eigen/LU"
 using namespace Eigen;
 // Autodiff include
@@ -23,7 +23,7 @@ extern "C" {
 #endif
     int start_ekf(double initial_velocity);
     
-    int step_ekf(double driving_angle, double front_wheel_vel, double rear_wheel_vel);
+    double step_ekf(double driving_angle, double front_wheel_vel, double rear_wheel_vel);
 #ifdef __cplusplus
 } 
 #endif

@@ -19,8 +19,8 @@
 #define SECONDARY_APPLY_RATE           8458000  //Pa/Sec
 #define RELEASE_RATE                   50000000 //Pa/Sec
 #define MIN_WHEEL_SPIN_ACCELERATION    -95      //Met/Sec^2
-#define MAX_WHEEL_SPIN_ACCELERATION    20//0        //Met/Sec^2
-#define INITIAL_MAX_WHEEL_SLIP         0.1      //norm wheel slip
+#define MAX_WHEEL_SPIN_ACCELERATION    20       //Met/Sec^2
+#define INITIAL_MAX_WHEEL_SLIP         0.12     //norm wheel slip
 static float MAX_WHEEL_SLIP[] = {INITIAL_MAX_WHEEL_SLIP,
                                  INITIAL_MAX_WHEEL_SLIP, 
                                  INITIAL_MAX_WHEEL_SLIP, 

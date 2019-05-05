@@ -50,6 +50,8 @@ SET(ROBOT_SOURCES
     #src/tiny_ekf.c
     #src/tiny_ekf.h
     src/include/TinyEKF/src/tiny_ekf_struct.h
+    src/include/eigen-git-mirror/Eigen/LU
+    src/include/eigen-git-mirror/Eigen/Core
 )
 
 # Official-only charlierobot instances.
