@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #ifndef ABS_H_
 #define ABS_H_
 
@@ -18,8 +20,11 @@
 #define RELEASE_RATE                   50000000 //Pa/Sec
 #define MIN_WHEEL_SPIN_ACCELERATION    -95      //Met/Sec^2
 #define MAX_WHEEL_SPIN_ACCELERATION    0        //Met/Sec^2
-#define INITIAL_MAX_WHEEL_SLIP         0.1 
-static float MAX_WHEEL_SLIP[] = {INITIAL_MAX_WHEEL_SLIP, INITIAL_MAX_WHEEL_SLIP, INITIAL_MAX_WHEEL_SLIP, INITIAL_MAX_WHEEL_SLIP};
+#define INITIAL_MAX_WHEEL_SLIP         0.1      //norm wheel slip
+static float MAX_WHEEL_SLIP[] = {INITIAL_MAX_WHEEL_SLIP,
+                                 INITIAL_MAX_WHEEL_SLIP, 
+                                 INITIAL_MAX_WHEEL_SLIP, 
+                                 INITIAL_MAX_WHEEL_SLIP};
 #define MAX_BRAKE_PRESSURE             13000000 //Pa
 #define WHEEL_RADIUS_STATIC            0.3179f  //Met
 
@@ -32,6 +37,6 @@ static float MAX_WHEEL_SLIP[] = {INITIAL_MAX_WHEEL_SLIP, INITIAL_MAX_WHEEL_SLIP,
  void phase(int wheel, float inputPressure) ;
  float getVehicleSpeed() ;
 
- void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVelocity[4], float newTimeStamp/*, float refSpeed */);
+ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVelocity[4], float newTimeStamp);
 
  #endif

@@ -1,7 +1,9 @@
 INCLUDE(../../../cmake/macros.cmake)
 
-# INCLUDE(/src/drivers/charlierobot/src/velocity_estimator/eigen-git-mirror)
-# INCLUDE(/src/drivers/charlierobot/src/velocity_estimator/autodiff)
+#include_directories(src/include)
+include_directories(src/include/TinyEKF/src)
+include_directories(src/include/autodiff)
+include_directories(src/include/eigen-git-mirror)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -40,15 +42,15 @@ SET(ROBOT_SOURCES
     src/Vec3d.h
     src/ABS.c
     src/ABS.h
-    src/velocity_estimator/velocity_EKF.cpp
-    src/velocity_estimator/velocity_EKF.h
-    src/velocity_estimator/tiny_ekf.c
-    src/velocity_estimator/tiny_ekf.h
-    src/velocity_estimator/tinyekf_config.h
-    src/velocity_estimator/TinyEKF.h
-    src/velocity_estimator/tiny_ekf_struct.h
+    src/velocity_EKF.cpp
+    src/velocity_EKF.h
+    src/include/TinyEKF/src/tiny_ekf.c
+    src/include/TinyEKF/src/tiny_ekf.h
+    src/tinyekf_config.h
+    #src/tiny_ekf.c
+    #src/tiny_ekf.h
+    src/include/TinyEKF/src/tiny_ekf_struct.h
 )
-
 
 # Official-only charlierobot instances.
 # SET(ROBOT_CLONES charlierobot_36GP charlierobot_67GP charlierobot_lp1 charlierobot_ls1 charlierobot_ls2 charlierobot_mpa1

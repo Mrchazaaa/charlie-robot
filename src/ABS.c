@@ -1,23 +1,23 @@
-#include <stdio.h>
 #include "ABS.h"
-#include "velocity_estimator/velocity_EKF.h"
+#include "velocity_EKF.h"
 
 #define OFF 0 //state used to represent that ABS is non-active on selected wheels
 
 static float TIMERS[4] = {-1, -1, -1, -1}; //timer for each wheel (-1 indicates that the timer is not being used)
-static int phaseStates[4] = {OFF, OFF, OFF, OFF}; //used to remember which state the ABS algorithm is currently in (one for each wheel) 
+static int phaseStates[4] = {OFF, OFF, OFF, OFF}; //indicates which state the ABS algorithm is currently in (for each wheel) 
 
-static float *wheelBrakeCMD[4]; 
-static float wheelSpinVelocity[4] = {0, 0, 0, 0};
-static float wheelSpinAcceleration[4] = {0, 0, 0, 0};
-static float wheelSlipAcceleration[4] = {0, 0, 0, 0}; 
-static float wheelSlip[4] = {0, 0, 0, 0}; 
-static float lastTimeStamp = 0; //store the last time that ABS was called
+static float *wheelBrakeCMD[4]; //pointers to the variables used to control individual wheel brakes
+static float wheelSpinVelocity[4] = {0, 0, 0, 0}; //spin velocity of each wheel (angular velocity)
+static float wheelSpinAcceleration[4] = {0, 0, 0, 0}; //spin velocity acceleration of each wheel (angular velocity)
+static float wheelSlipAcceleration[4] = {0, 0, 0, 0}; //slip acceleration of each wheel (normalized slip)
+static float wheelSlip[4] = {0, 0, 0, 0}; //slip of each wheel (normalized slip)
+static float lastTimeStamp = 0; //store the last time that the ABS was run
 static float deltaTime = 0; //time since last ABS call
-static float vehicleSpeed;
-static int   ekfIsActive; //indicates whether the ekf needs to be initialized again
+static float vehicleSpeed; //longitudinal vehicle speed (calculated from undriven wheels when not braking or
+                           //                            calculated from EKF during braking)
+static int   ekfIsActive; //indicates whether the EKF needs to be initialized again (in case of multiple emergency brakes)
 
-//getter functions that allow main system to see variables calculated by ABS (USED IN DEBUGGING) 
+//getter functions that allow main system to see variables used by ABS (USED IN DEBUGGING) 
 int   getPhaseStates(int index) { return phaseStates[index]; }
 float getWheelSpinVelocity(int index) { return wheelSpinVelocity[index]; }
 float getWheelSpinAcceleration(int index) { return wheelSpinAcceleration[index]; }
@@ -26,30 +26,16 @@ float getWheelSlip(int index) { return wheelSlip[index]; }
 float getDeltaTime() { return deltaTime; }
 float getVehicleSpeed() { return vehicleSpeed; }
 
-//used to determine reference speed of vehicle (just use fastest wheel speed, may need to update this...)
-float maxWheelVelocity(float wheelVelocity[4]) {
-  float maxVelocity = wheelVelocity[0];
-
-  int i;
-  for ( i = 1 ; i < 4 ; i++ )
-  {
-    if (wheelVelocity[i] > maxVelocity) {
-      maxVelocity = wheelVelocity[i];
-    }
-  }
-
-  return maxVelocity;
-}
-
-void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVelocity[4], float newTimeStamp/*, float refSpeed */)
+//ABS code, continuously called throughout simulation
+void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVelocity[4], float newTimeStamp)
 {
   //if this is the first time that ABS has been called
   if (lastTimeStamp == 0) { 
-    ekfIsActive = 0;
+    ekfIsActive = 0; //not that the Extended Kalman Filter hasnt been initialized yet
 
-    //set the last time stamp to now
     lastTimeStamp = newTimeStamp;
-    //update pointers to brake command variables 
+
+    //update pointers to brake command variables (these locations will not change so no point repeatedly updating them)
     wheelBrakeCMD[0] = brakeCMD[0];
     wheelBrakeCMD[1] = brakeCMD[1];
     wheelBrakeCMD[2] = brakeCMD[2];
@@ -59,53 +45,48 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
   //calculate time since last ABS call
   deltaTime = newTimeStamp - lastTimeStamp;
 
-  //IMPLEMENT
-  //need to add code to accurately calculate current wheel velocity (not just using system calc)
-  //printf("speed syst: %.6f \n", refSpeed);
-  //printf("speed mine: %.6f \n", *newWheelSpinVelocity[0] * WHEEL_RADIUS_STATIC);
-  //printf("speed syst: %.6f %.6f \n", refSpeed, *newWheelSpinVelocity[0] * WHEEL_RADIUS_STATIC);
-  //printf("speed syst: %.6f %.6f \n", refSpeed, ((*newWheelSpinVelocity[0] * WHEEL_RADIUS_STATIC) + (*newWheelSpinVelocity[1] * WHEEL_RADIUS_STATIC) + (*newWheelSpinVelocity[2] * WHEEL_RADIUS_STATIC) + (*newWheelSpinVelocity[3] * WHEEL_RADIUS_STATIC) )/4 );
-  //printf("speed syst: %.6f %.6f \n", refSpeed, ((*newWheelSpinVelocity[FL] * WHEEL_RADIUS_STATIC) + (*newWheelSpinVelocity[FR] * WHEEL_RADIUS_STATIC) )/2 );
-
-  //update wheel acceleration values
-  wheelSpinAcceleration[0] = ((*newWheelSpinVelocity[0] * WHEEL_RADIUS_STATIC) - wheelSpinVelocity[0])/deltaTime;
-  wheelSpinAcceleration[1] = ((*newWheelSpinVelocity[1] * WHEEL_RADIUS_STATIC) - wheelSpinVelocity[1])/deltaTime;
-  wheelSpinAcceleration[2] = ((*newWheelSpinVelocity[2] * WHEEL_RADIUS_STATIC) - wheelSpinVelocity[2])/deltaTime;
-  wheelSpinAcceleration[3] = ((*newWheelSpinVelocity[3] * WHEEL_RADIUS_STATIC) - wheelSpinVelocity[3])/deltaTime;
+  //update wheel acceleration values (angular velocity acceleration)
+  wheelSpinAcceleration[0] = ((*newWheelSpinVelocity[0]) - wheelSpinVelocity[0])/deltaTime;
+  wheelSpinAcceleration[1] = ((*newWheelSpinVelocity[1]) - wheelSpinVelocity[1])/deltaTime;
+  wheelSpinAcceleration[2] = ((*newWheelSpinVelocity[2]) - wheelSpinVelocity[2])/deltaTime;
+  wheelSpinAcceleration[3] = ((*newWheelSpinVelocity[3]) - wheelSpinVelocity[3])/deltaTime;
   
-  //update wheel spin velocity
-  wheelSpinVelocity[0] = *newWheelSpinVelocity[0] * WHEEL_RADIUS_STATIC;
-  wheelSpinVelocity[1] = *newWheelSpinVelocity[1] * WHEEL_RADIUS_STATIC;
-  wheelSpinVelocity[2] = *newWheelSpinVelocity[2] * WHEEL_RADIUS_STATIC;
-  wheelSpinVelocity[3] = *newWheelSpinVelocity[3] * WHEEL_RADIUS_STATIC;
+  //update current wheel spin velocity (angular velocity)
+  wheelSpinVelocity[0] = *newWheelSpinVelocity[0];
+  wheelSpinVelocity[1] = *newWheelSpinVelocity[1];
+  wheelSpinVelocity[2] = *newWheelSpinVelocity[2];
+  wheelSpinVelocity[3] = *newWheelSpinVelocity[3];
 
-  //IMPLEMENT
-  //calculate vehicle speed (just use fastest wheel method or come up with new calc method)
+  //calculate vehicle speed (calculated via Extended Kalman Filter with a nonlinear deterministic physics model)
+  //EKF is only active during braking, otherwise the average speed of the undriven wheels is used as reference speed
   if (ekfIsActive == 0) {
-    vehicleSpeed = (*newWheelSpinVelocity[FL] * WHEEL_RADIUS_STATIC + *newWheelSpinVelocity[FR] * WHEEL_RADIUS_STATIC )/2;//refSpeed;//maxWheelVelocity(wheelSpinVelocity);
+    vehicleSpeed = (*newWheelSpinVelocity[FL] * WHEEL_RADIUS_STATIC + *newWheelSpinVelocity[FR] * WHEEL_RADIUS_STATIC )/2;
   }
-   
+  
+  //if EKF is being used (ABS is active), pass average front and rear wheel angular velocity data for calculating reference speed 
   if (ekfIsActive == 1) {
     double frontAngularSpeed = (*newWheelSpinVelocity[FR] + *newWheelSpinVelocity[FL]) / 2;
     double rearAngularSpeed = (*newWheelSpinVelocity[RR] + *newWheelSpinVelocity[RL]) / 2;
+    //always assume that lateral velocity is 0 (this driving angle is 0)
     vehicleSpeed = step_ekf( 0, frontAngularSpeed, rearAngularSpeed );
   }
 
   //update wheel slip acceleration
-  wheelSlipAcceleration[0] = (((vehicleSpeed - wheelSpinVelocity[0]) / vehicleSpeed) - wheelSlip[0])/deltaTime;
-  wheelSlipAcceleration[1] = (((vehicleSpeed - wheelSpinVelocity[1]) / vehicleSpeed) - wheelSlip[1])/deltaTime;
-  wheelSlipAcceleration[2] = (((vehicleSpeed - wheelSpinVelocity[2]) / vehicleSpeed) - wheelSlip[2])/deltaTime;
-  wheelSlipAcceleration[3] = (((vehicleSpeed - wheelSpinVelocity[3]) / vehicleSpeed) - wheelSlip[3])/deltaTime;
+  wheelSlipAcceleration[0] = (((vehicleSpeed - wheelSpinVelocity[0] * WHEEL_RADIUS_STATIC) / vehicleSpeed) - wheelSlip[0])/deltaTime;
+  wheelSlipAcceleration[1] = (((vehicleSpeed - wheelSpinVelocity[1] * WHEEL_RADIUS_STATIC) / vehicleSpeed) - wheelSlip[1])/deltaTime;
+  wheelSlipAcceleration[2] = (((vehicleSpeed - wheelSpinVelocity[2] * WHEEL_RADIUS_STATIC) / vehicleSpeed) - wheelSlip[2])/deltaTime;
+  wheelSlipAcceleration[3] = (((vehicleSpeed - wheelSpinVelocity[3] * WHEEL_RADIUS_STATIC) / vehicleSpeed) - wheelSlip[3])/deltaTime;
 
   //update wheel slip values
-  wheelSlip[0] = (vehicleSpeed - wheelSpinVelocity[0]) / vehicleSpeed;
-  wheelSlip[1] = (vehicleSpeed - wheelSpinVelocity[1]) / vehicleSpeed;
-  wheelSlip[2] = (vehicleSpeed - wheelSpinVelocity[2]) / vehicleSpeed;
-  wheelSlip[3] = (vehicleSpeed - wheelSpinVelocity[3]) / vehicleSpeed; 
+  wheelSlip[0] = (vehicleSpeed - wheelSpinVelocity[0] * WHEEL_RADIUS_STATIC) / vehicleSpeed;
+  wheelSlip[1] = (vehicleSpeed - wheelSpinVelocity[1] * WHEEL_RADIUS_STATIC) / vehicleSpeed;
+  wheelSlip[2] = (vehicleSpeed - wheelSpinVelocity[2] * WHEEL_RADIUS_STATIC) / vehicleSpeed;
+  wheelSlip[3] = (vehicleSpeed - wheelSpinVelocity[3] * WHEEL_RADIUS_STATIC) / vehicleSpeed; 
   
+  //update last time stamp
   lastTimeStamp = newTimeStamp;
  
-  printf("is ekf on? %d %.6f %.6f %.6f %.6f \n", ekfIsActive, vehicleSpeed, newTimeStamp, (*newWheelSpinVelocity[FL] + *newWheelSpinVelocity[FR])/2, (*newWheelSpinVelocity[FR] + *newWheelSpinVelocity[RL])/2);
+  //printf("is ekf on? %d %.6f %.6f %.6f %.6f \n", ekfIsActive, vehicleSpeed, newTimeStamp, (*newWheelSpinVelocity[FL] + *newWheelSpinVelocity[FR])/2, (*newWheelSpinVelocity[FR] + *newWheelSpinVelocity[RL])/2);
 
   //only activate ABS if threshold values are exceeded
   if ( vehicleSpeed > MIN_VEHICLE_VELOCITY_THRESHOLD 
@@ -115,14 +96,15 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
     int i;
     for ( i = 0 ; i < 4 ; i++ )
     {
-      
-      if ( wheelSpinVelocity[i] > MIN_WHEEL_VELOCITY_THRESHOLD ) {
+      if ( wheelSpinVelocity[i] * WHEEL_RADIUS_STATIC > MIN_WHEEL_VELOCITY_THRESHOLD ) {
         //loop over control algorithm for wheel i
         phase(i, newInputPressure);
         
-        if (ekfIsActive == 0) { //if ekf needs to be initialised, initialise it
+        if (ekfIsActive == 0) { //if ekf needs to be initialized, initialize it
+          
           start_ekf(vehicleSpeed); 
 
+          //indicate that EKF should be used to calculate reference speed
           ekfIsActive = 1;
         }
 
@@ -147,7 +129,7 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
 
     lastTimeStamp = 0;
 
-    //set output pressure to input pressure (no intervention by ABS)
+    //set output pressure to input pressure (I.E: no intervention by ABS)
     *wheelBrakeCMD[0] = newInputPressure;
     *wheelBrakeCMD[1] = newInputPressure;
     *wheelBrakeCMD[2] = newInputPressure;
@@ -157,6 +139,7 @@ void cycleABS( float newInputPressure, float *brakeCMD[4], float *newWheelSpinVe
   return;
 }
 
+//ABS Bosch V1 algorithm (update each wheel's braking pressure to minimize wheel slip) 
 void phase(int wheel, float inputPressure) {
   
   switch(phaseStates[wheel]) {

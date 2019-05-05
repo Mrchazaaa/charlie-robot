@@ -369,52 +369,52 @@ src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.o.provides: src/d
 src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.o.provides.build: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.o
 
 
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/flags.make
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o: src/drivers/charlierobot/src/velocity_estimator/velocity_EKF.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o"
-	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o -c /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/velocity_EKF.cpp
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/flags.make
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o: src/drivers/charlierobot/src/velocity_EKF.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o"
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o -c /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_EKF.cpp
 
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.i"
-	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/velocity_EKF.cpp > CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.i
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.i"
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_EKF.cpp > CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.i
 
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.s"
-	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/velocity_EKF.cpp -o CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.s
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.s"
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_EKF.cpp -o CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.s
 
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o.requires:
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o.requires:
 
-.PHONY : src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o.requires
+.PHONY : src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o.requires
 
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o.provides: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o.requires
-	$(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o.provides.build
-.PHONY : src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o.provides
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o.provides: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o.requires
+	$(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o.provides.build
+.PHONY : src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o.provides
 
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o.provides.build: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o.provides.build: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o
 
 
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/flags.make
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o: src/drivers/charlierobot/src/velocity_estimator/tiny_ekf.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o"
-	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o   -c /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/tiny_ekf.c
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/flags.make
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o: src/drivers/charlierobot/src/include/TinyEKF/src/tiny_ekf.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o"
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o   -c /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/include/TinyEKF/src/tiny_ekf.c
 
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.i"
-	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/tiny_ekf.c > CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.i
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.i"
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/include/TinyEKF/src/tiny_ekf.c > CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.i
 
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.s"
-	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/tiny_ekf.c -o CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.s
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.s"
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/include/TinyEKF/src/tiny_ekf.c -o CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.s
 
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o.requires:
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o.requires:
 
-.PHONY : src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o.requires
+.PHONY : src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o.requires
 
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o.provides: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o.requires
-	$(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o.provides.build
-.PHONY : src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o.provides
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o.provides: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o.requires
+	$(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o.provides.build
+.PHONY : src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o.provides
 
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o.provides.build: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o.provides.build: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o
 
 
 # Object files for target charlierobot
@@ -432,8 +432,8 @@ charlierobot_OBJECTS = \
 "CMakeFiles/charlierobot.dir/src/spline.cpp.o" \
 "CMakeFiles/charlierobot.dir/src/Utils.cpp.o" \
 "CMakeFiles/charlierobot.dir/src/ABS.c.o" \
-"CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o" \
-"CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o"
+"CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o" \
+"CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o"
 
 # External object files for target charlierobot
 charlierobot_EXTERNAL_OBJECTS =
@@ -451,8 +451,8 @@ lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.so: src/drivers/cha
 lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.so: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/spline.cpp.o
 lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.so: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/Utils.cpp.o
 lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.so: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.o
-lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.so: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o
-lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.so: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o
+lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.so: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o
+lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.so: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o
 lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.so: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make
 lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.so: /usr/lib/x86_64-linux-gnu/libplibsg.so
 lib64/games/speed-dreams-2/drivers/charlierobot/charlierobot.so: lib64/games/speed-dreams-2/lib/librobottools.so
@@ -515,8 +515,8 @@ src/drivers/charlierobot/CMakeFiles/charlierobot.dir/requires: src/drivers/charl
 src/drivers/charlierobot/CMakeFiles/charlierobot.dir/requires: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/spline.cpp.o.requires
 src/drivers/charlierobot/CMakeFiles/charlierobot.dir/requires: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/Utils.cpp.o.requires
 src/drivers/charlierobot/CMakeFiles/charlierobot.dir/requires: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.o.requires
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/requires: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o.requires
-src/drivers/charlierobot/CMakeFiles/charlierobot.dir/requires: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o.requires
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/requires: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o.requires
+src/drivers/charlierobot/CMakeFiles/charlierobot.dir/requires: src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o.requires
 
 .PHONY : src/drivers/charlierobot/CMakeFiles/charlierobot.dir/requires
 

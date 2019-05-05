@@ -6,7 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
   "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/ABS.c" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/ABS.c.o"
-  "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/tiny_ekf.c" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o"
+  "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/include/TinyEKF/src/tiny_ekf.c" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
@@ -30,6 +30,9 @@ set(CMAKE_TARGET_DEFINITIONS_C
 # The include file search paths:
 set(CMAKE_C_TARGET_INCLUDE_PATH
   "."
+  "src/drivers/charlierobot/src/include/TinyEKF/src"
+  "src/drivers/charlierobot/src/include/autodiff"
+  "src/drivers/charlierobot/src/include/eigen-git-mirror"
   "src/interfaces"
   "src/libs/learning"
   "src/libs/math"
@@ -50,7 +53,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/pidcontroller.cpp" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/pidcontroller.cpp.o"
   "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/pit.cpp" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/pit.cpp.o"
   "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/spline.cpp" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/spline.cpp.o"
-  "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_estimator/velocity_EKF.cpp" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o"
+  "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/src/velocity_EKF.cpp" "/home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS/src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -74,6 +77,9 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "."
+  "src/drivers/charlierobot/src/include/TinyEKF/src"
+  "src/drivers/charlierobot/src/include/autodiff"
+  "src/drivers/charlierobot/src/include/eigen-git-mirror"
   "src/interfaces"
   "src/libs/learning"
   "src/libs/math"

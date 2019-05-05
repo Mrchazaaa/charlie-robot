@@ -34,6 +34,9 @@
 
 #define GRAVITY 9.81
 
+extern "C" {
+  #include "ABS.h"
+}
 
 TDriver::TDriver(int index)
 {
@@ -274,9 +277,6 @@ void TDriver::NewRace(PtCarElt Car, PSituation Situation)
   mPrevRacePos= Car->_pos;
 }
 
-extern "C" {
-  #include "ABS.h"
-}
 
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)

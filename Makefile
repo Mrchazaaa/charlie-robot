@@ -436,6 +436,33 @@ src/driver.cpp.s:
 	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/driver.cpp.s
 .PHONY : src/driver.cpp.s
 
+src/include/TinyEKF/src/tiny_ekf.o: src/include/TinyEKF/src/tiny_ekf.c.o
+
+.PHONY : src/include/TinyEKF/src/tiny_ekf.o
+
+# target to build an object file
+src/include/TinyEKF/src/tiny_ekf.c.o:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.o
+.PHONY : src/include/TinyEKF/src/tiny_ekf.c.o
+
+src/include/TinyEKF/src/tiny_ekf.i: src/include/TinyEKF/src/tiny_ekf.c.i
+
+.PHONY : src/include/TinyEKF/src/tiny_ekf.i
+
+# target to preprocess a source file
+src/include/TinyEKF/src/tiny_ekf.c.i:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.i
+.PHONY : src/include/TinyEKF/src/tiny_ekf.c.i
+
+src/include/TinyEKF/src/tiny_ekf.s: src/include/TinyEKF/src/tiny_ekf.c.s
+
+.PHONY : src/include/TinyEKF/src/tiny_ekf.s
+
+# target to generate assembly for a file
+src/include/TinyEKF/src/tiny_ekf.c.s:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/include/TinyEKF/src/tiny_ekf.c.s
+.PHONY : src/include/TinyEKF/src/tiny_ekf.c.s
+
 src/opponent.o: src/opponent.cpp.o
 
 .PHONY : src/opponent.o
@@ -544,59 +571,32 @@ src/spline.cpp.s:
 	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/spline.cpp.s
 .PHONY : src/spline.cpp.s
 
-src/velocity_estimator/tiny_ekf.o: src/velocity_estimator/tiny_ekf.c.o
+src/velocity_EKF.o: src/velocity_EKF.cpp.o
 
-.PHONY : src/velocity_estimator/tiny_ekf.o
-
-# target to build an object file
-src/velocity_estimator/tiny_ekf.c.o:
-	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.o
-.PHONY : src/velocity_estimator/tiny_ekf.c.o
-
-src/velocity_estimator/tiny_ekf.i: src/velocity_estimator/tiny_ekf.c.i
-
-.PHONY : src/velocity_estimator/tiny_ekf.i
-
-# target to preprocess a source file
-src/velocity_estimator/tiny_ekf.c.i:
-	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.i
-.PHONY : src/velocity_estimator/tiny_ekf.c.i
-
-src/velocity_estimator/tiny_ekf.s: src/velocity_estimator/tiny_ekf.c.s
-
-.PHONY : src/velocity_estimator/tiny_ekf.s
-
-# target to generate assembly for a file
-src/velocity_estimator/tiny_ekf.c.s:
-	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/tiny_ekf.c.s
-.PHONY : src/velocity_estimator/tiny_ekf.c.s
-
-src/velocity_estimator/velocity_EKF.o: src/velocity_estimator/velocity_EKF.cpp.o
-
-.PHONY : src/velocity_estimator/velocity_EKF.o
+.PHONY : src/velocity_EKF.o
 
 # target to build an object file
-src/velocity_estimator/velocity_EKF.cpp.o:
-	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.o
-.PHONY : src/velocity_estimator/velocity_EKF.cpp.o
+src/velocity_EKF.cpp.o:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.o
+.PHONY : src/velocity_EKF.cpp.o
 
-src/velocity_estimator/velocity_EKF.i: src/velocity_estimator/velocity_EKF.cpp.i
+src/velocity_EKF.i: src/velocity_EKF.cpp.i
 
-.PHONY : src/velocity_estimator/velocity_EKF.i
+.PHONY : src/velocity_EKF.i
 
 # target to preprocess a source file
-src/velocity_estimator/velocity_EKF.cpp.i:
-	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.i
-.PHONY : src/velocity_estimator/velocity_EKF.cpp.i
+src/velocity_EKF.cpp.i:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.i
+.PHONY : src/velocity_EKF.cpp.i
 
-src/velocity_estimator/velocity_EKF.s: src/velocity_estimator/velocity_EKF.cpp.s
+src/velocity_EKF.s: src/velocity_EKF.cpp.s
 
-.PHONY : src/velocity_estimator/velocity_EKF.s
+.PHONY : src/velocity_EKF.s
 
 # target to generate assembly for a file
-src/velocity_estimator/velocity_EKF.cpp.s:
-	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_estimator/velocity_EKF.cpp.s
-.PHONY : src/velocity_estimator/velocity_EKF.cpp.s
+src/velocity_EKF.cpp.s:
+	cd /home/mrchazaaa/workspace/third-year-project/work/SPEEDDREAMS && $(MAKE) -f src/drivers/charlierobot/CMakeFiles/charlierobot.dir/build.make src/drivers/charlierobot/CMakeFiles/charlierobot.dir/src/velocity_EKF.cpp.s
+.PHONY : src/velocity_EKF.cpp.s
 
 # Help Target
 help:
@@ -640,6 +640,9 @@ help:
 	@echo "... src/driver.o"
 	@echo "... src/driver.i"
 	@echo "... src/driver.s"
+	@echo "... src/include/TinyEKF/src/tiny_ekf.o"
+	@echo "... src/include/TinyEKF/src/tiny_ekf.i"
+	@echo "... src/include/TinyEKF/src/tiny_ekf.s"
 	@echo "... src/opponent.o"
 	@echo "... src/opponent.i"
 	@echo "... src/opponent.s"
@@ -652,12 +655,9 @@ help:
 	@echo "... src/spline.o"
 	@echo "... src/spline.i"
 	@echo "... src/spline.s"
-	@echo "... src/velocity_estimator/tiny_ekf.o"
-	@echo "... src/velocity_estimator/tiny_ekf.i"
-	@echo "... src/velocity_estimator/tiny_ekf.s"
-	@echo "... src/velocity_estimator/velocity_EKF.o"
-	@echo "... src/velocity_estimator/velocity_EKF.i"
-	@echo "... src/velocity_estimator/velocity_EKF.s"
+	@echo "... src/velocity_EKF.o"
+	@echo "... src/velocity_EKF.i"
+	@echo "... src/velocity_EKF.s"
 .PHONY : help
 
 
