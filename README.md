@@ -1,4 +1,7 @@
 # charlierobot
+
+![alt text](./charlierobot.png)
+
 A speed-dreams-2 driver I've developed, to test my implementations of ABS and other driver assistance systems for my third year project.
 
 In the academic community surrounding automotive-safety, it is vital to incorporate the behaviour of widespread software control systems (such as Adaptive Cruise Control, Traction Control Systems, etc) into models used in conducting accurate research. However, source code for popular commercial implementations of these systems is highly guarded by manufacturers and thus it is very difficult for researchers to develop models that accurately reflect the systems used in the real world.

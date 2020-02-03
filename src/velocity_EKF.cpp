@@ -30,7 +30,7 @@ static void init(double initial_velocity)
     double e = 0.01;
     ekf.x[0] = initial_velocity - e;
     ekf.x[1] = e;
-    ekf.x[2] = 0.17;
+    ekf.x[2] = 1.1;
 }
 
 //simulation parameters
