@@ -1,9 +1,31 @@
 ![alt text](./charlierobot.png)
 # charlierobot
-A speed-dreams-2 driver I've developed, to test my implementations of ABS and other driver assistance systems for my third year project.
+A driver for Speed Dreams 2 implementing the open source Anti-Lock Braking System I developed as part of my dissertation.
 
-In the academic community surrounding automotive-safety, it is vital to incorporate the behaviour of widespread software control systems (such as Adaptive Cruise Control, Traction Control Systems, etc) into models used in conducting accurate research. However, source code for popular commercial implementations of these systems is highly guarded by manufacturers and thus it is very difficult for researchers to develop models that accurately reflect the systems used in the real world.
+## Installing Speed Dreams 2
+You might not need to build from source if you just want to work on CharlieRobot and dont need access to Speed Dreams source files.
 
-The topic of my dissertation focused around a self-defined project entitled: "Construction of Automotive Control Software" , I produced an anti-lock braking system (ABS) which attempted to mimic the timing characteristics of commercial ABS products, by implementing an older ABS algorithm defined in a paper published by Bosch. However, this paper did not completely describe the system's construction (particularly in determining vehicle speed in the ABS Electronic Control Unit) and so work from several other research areas were combined to produce a working Anti-lock Braking System that, atleast to some degree, reflects those used in the real world.
+## Building Speed Dreams 2 from Source Files
+To further develop CharlieRobot you might find it useful to build Speed Dreams from source to allow access to 
 
-One of the biggest challenges faced in producing this work was determining vehicle longitudinal velocity whilst only being able to discern circumferential speeds of individual wheels (these values would not directly reflect the actual velocity of the vehicle, under emergency braking conditions, due to large braking forces locking up the wheels). To solve this I implemented an Extended Kalman filter which estimates vehicle longitudinal velocity by utilising an accurate tire physics model and various other wheel speed data. Below, I've included several graphs showing actual vehicle velocity vs velocity calculated by my EKF to demonstrate how it converges on the real value with more accuracy over time.
+Source files are available via http://www.speed-dreams.org/#download, which incude useful installation instructions for Linux, Windows and MacOs https://sourceforge.net/p/speed-dreams/code/HEAD/tree/trunk/INSTALL.txt.
+
+### Linux 
+Whilst building from source on a Linux machine, I've found the following guide written by Roman M. Yagodin very helpful http://roman-yagodin.github.io/compile-guide/2016/03/30/build-speed-dreams-linux.
+
+You might run into errors concerning missing header files for the PLIB Library, the installation of which is outlined helpfully at http://www.berniw.org/tutorials/robot/torcs/install/plib-install.html as part of a wider guide outlining driver creation for TORCS (a driving simulator from which Speed Dreams descended).
+
+
+### Windows 
+1.
+
+## Installing Charlie Robot
+1. in speed-dreams/src/drivers/charlie-robot/src/include/, clone the following repos:
+git@github.com:eigenteam/eigen-git-mirror.git
+git@github.com:autodiff/autodiff.git (needs to be at commit version 1cb0d9bde762f2e4b06c7cb053b6da822c6d45ca)
+https://github.com/simondlevy/TinyEKF
+2. In speed-dreams/src/drivers/CMakeLists.txt add "SD_ADD_SUBDIRECTORY(charlie-robot)"
+3. We need to add some kind of speed-dreams/data/charlie-robot.xml file
+4. cd "speed-dreams/build" run "cmake .." and then "make"
+
+## Basic Usage
