@@ -26,6 +26,6 @@ git@github.com:autodiff/autodiff.git (needs to be at commit version 1cb0d9bde762
 https://github.com/simondlevy/TinyEKF
 2. In speed-dreams/src/drivers/CMakeLists.txt add "SD_ADD_SUBDIRECTORY(charlie-robot)"
 3. We need to add some kind of speed-dreams/data/charlie-robot.xml file
-4. cd "speed-dreams/build" run "cmake .." and then "make"
+4. cd "speed-dreams/build" run "cmake .." and then "make" (possibly followed by "make install")
 
 ## Basic Usage

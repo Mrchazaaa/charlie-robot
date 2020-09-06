@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE params SYSTEM "../../libs/tgf/params.dtd">
+
+<params name="charlierobot" type="robotdef">
+  <section name="Robots">
+    <section name="index">
+
+      <section name="1">
+        <attstr name="name" val="Charlie Robot"></attstr>
+        <attstr name="short name" val="CR"></attstr>
+        <attstr name="code name" val="CR"></attstr>
+        <attstr name="desc" val="Anyone can drive, but who can stop?"></attstr>
+        <attstr name="team" val="Team ABS"></attstr>
+        <attstr name="author" val="Charlie Howlett"></attstr>
+        <attstr name="car name" val="trb1-cavallo-360rb"></attstr>
+        <attnum name="race number" val="71"></attnum>
+        <attnum name="red" val="0.8"></attnum>
+        <attnum name="green" val="0.8"></attnum>
+        <attnum name="blue" val="0.3"></attnum>
+        <attstr name="features" val=""></attstr>
+      </section>
+    </section>
+  </section>
+</params>

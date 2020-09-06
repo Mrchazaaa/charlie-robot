@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- trb1-cavallo-360rb setup for Brondehach track-->
+
+<!--
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+
+  $Id$
+-->
+
+<!DOCTYPE params SYSTEM "../../../../src/libs/tgf/params.dtd">
+
+<params name="trb1-cavallo-360rb" type="template">
+
+    <section name="Rear Right Suspension">
+        <attnum name="bellcrank" min="0.1" max="5" val="1.4"/>
+    </section>
+
+    <section name="Rear Left Suspension">
+        <attnum name="bellcrank" min="0.1" max="5" val="1.4"/>
+    </section>
+
+  <section name="KiloPrivate">
+    <attnum name="CornerSpeed" val="17.0"/>
+    <attnum name="CornerAccel" val="1.1"/>
+    <attnum name="BrakeDelay" val="15.0"/>
+    <attnum name="AvoidSpeedAdjust" val="2.0"/>
+    <attnum name="ExtMargin" val="1.7"/>
+    <attnum name="IntMargin" val="0.5"/>
+		<attnum name="MinCornerInverse" min="0" max="2" val="0.0021"/>
+  </section>
+
+</params>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  kilo2008 track-specific setup for E-track-1 track
+  
+  $Id$  
+-->
+
+<!DOCTYPE params SYSTEM "../../../../src/libs/tgf/params.dtd">
+
+<params name="track-spec" type="template" mode="mw">
+  <section name="KiloPrivate">
+    <attnum name="PitOffset" val="0.0"/>
+    <attnum name="SecurityRadius" val="10.0"/>
+  </section>
+</params>
