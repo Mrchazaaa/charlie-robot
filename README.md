@@ -23,7 +23,7 @@ You might run into errors concerning missing header files for the PLIB Library, 
 2. In <strong>{SPEED-DREAMS-DIR}/src/drivers/CMakeLists.txt</strong> add <strong>"SD_ADD_SUBDIRECTORY(charlie-robot)"</strong>
 3. Copy <strong>{CHARLIE-ROBOT-DIR}/data/charlierobot</strong> into <strong>{SPEED-DREAMS-DIR}/data/drivers</strong>
 4. In <strong>{SPEED-DREAMS-DIR}/data/CMakeLists.txt</strong> add <strong>"SD_ADD_SUBDIRECTORY(charlierobot)"</strong>
-3. cd "speed-dreams/build" run "cmake .." and then "make" (possibly followed by "make install")
+3. cd "speed-dreams/build" run "cmake .." and then "make" (possibly followed by "make install").
 
 ## Basic Usage
 Once CharlieRobot is installed: 
