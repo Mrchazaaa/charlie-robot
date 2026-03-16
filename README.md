@@ -1,5 +1,3 @@
-<image src="./charlierobot.png" width="200px">
-
 # charlierobot
 
 A Speed Dreams 2 robot driver implementing the open source Anti-Lock Braking System I developed as part of my Computer Science BSc dissertation. The system aims to accurately model the commercial systems in wide use today by the general public, a difficult task owing to the highly sensitive nature of the source code belonging to automotive manufacturers. This was achieved by replicating model behavior as outlined in "Brakes, Brake control and driver Assistance Systems: Function, Regulation and Components" by K. Reif, where a typical ABS control loop is defined in its various stages (p. 82).
