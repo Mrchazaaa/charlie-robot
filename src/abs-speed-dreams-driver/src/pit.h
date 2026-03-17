@@ -21,7 +21,7 @@
 #include "torcs_or_sd.h"
 #include "globaldefinitions.h"
 
-#ifdef CHARLIEROBOT_TORCS
+#ifdef ABSSPEEDDREAMSDRIVER_TORCS
 #include <track.h>
 #include <car.h>
 #include <raceman.h>

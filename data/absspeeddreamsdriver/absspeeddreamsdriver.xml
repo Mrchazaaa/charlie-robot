@@ -2,14 +2,14 @@
 
 <!DOCTYPE params SYSTEM "../../libs/tgf/params.dtd">
 
-<params name="charlierobot" type="robotdef">
+<params name="absspeeddreamsdriver" type="robotdef">
   <section name="Robots">
     <section name="index">
 
       <section name="1">
-        <attstr name="name" val="Charlie Robot"></attstr>
-        <attstr name="short name" val="CR"></attstr>
-        <attstr name="code name" val="CR"></attstr>
+        <attstr name="name" val="ABS Speed Dreams Driver"></attstr>
+        <attstr name="short name" val="ASDD"></attstr>
+        <attstr name="code name" val="ASDD"></attstr>
         <attstr name="desc" val="Anyone can drive, but who can stop?"></attstr>
         <attstr name="team" val="Team ABS"></attstr>
         <attstr name="author" val="Charlie Howlett"></attstr>

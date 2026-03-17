@@ -19,16 +19,16 @@
 #define _TORCS_OR_SD_H_
 
 // Set here TORCS or SPEEDDREAMS manually
-//#define CHARLIEROBOT_TORCS
-#define CHARLIEROBOT_SPEEDDREAMS
+//#define ABSSPEEDDREAMSDRIVER_TORCS
+#define ABSSPEEDDREAMSDRIVER_SPEEDDREAMS
 
 // The following globals will be set automatically
-#ifdef CHARLIEROBOT_TORCS
-const bool IS_CHARLIEROBOT_TORCS = true;
-const bool IS_CHARLIEROBOT_SPEEDDREAMS = false;
+#ifdef ABSSPEEDDREAMSDRIVER_TORCS
+const bool IS_ABSSPEEDDREAMSDRIVER_TORCS = true;
+const bool IS_ABSSPEEDDREAMSDRIVER_SPEEDDREAMS = false;
 #else
-const bool IS_CHARLIEROBOT_TORCS = false;
-const bool IS_CHARLIEROBOT_SPEEDDREAMS = true;
+const bool IS_ABSSPEEDDREAMSDRIVER_TORCS = false;
+const bool IS_ABSSPEEDDREAMSDRIVER_SPEEDDREAMS = true;
 #endif
 
 #endif // _TORCS_OR_SD_H_

@@ -24,7 +24,7 @@
 #include <iostream>
 #include <fstream>
 
-#ifdef CHARLIEROBOT_TORCS
+#ifdef ABSSPEEDDREAMSDRIVER_TORCS
 #include "tgfclient.h"
 #endif
 
@@ -183,7 +183,7 @@ void TDriver::InitTrack(PTrack Track, PCarHandle CarHandle, PCarSettings *CarPar
   double distance = Situation->_totLaps * mTrack->length;
   mFuelStart = 56.0; //getFuel(distance);
 
-  
+
 
   if (mLearning) {
     mFuelStart = 5.0;
@@ -286,7 +286,7 @@ void TDriver::Drive()
 //  driverMsgValue(0, "useconds", usec2 - usec1);
 //#endif
 
-  //UPDATE STEERING  
+  //UPDATE STEERING
   float angle;
   const float SC = 1.0;
 
@@ -295,23 +295,23 @@ void TDriver::Drive()
   angle -= SC*oCar->_trkPos.toMiddle/oCar->_trkPos.seg->width;
 
   oCar->_steerCmd = (tdble)(angle / oCar->_steerLock);
-  //UPDATE STEERING 
+  //UPDATE STEERING
 
-  //UPDATE GEARS/CLUTCH 
+  //UPDATE GEARS/CLUTCH
   updateTimer();
   oCar->_gearCmd = getGear();
   oCar->_clutchCmd = (tdble) getClutch();  // must be after gear
   //UPDATE GEARS/CLUTCH
 
-  //CONTROL SPEED 
+  //CONTROL SPEED
   //convert from target speed (specified in km/h) to m/s (as used by speed dreams)
   double targetspeedkph = 150;
   double targetspeed = targetspeedkph/3.6;
   controlSpeed(mAccel, targetspeed);
   mSpeed = oCar->_speed_x;
-  oCar->_accelCmd = (tdble)/*filterTCLSideSlip(filterTCL(*/mAccel/*))*/; 
+  oCar->_accelCmd = (tdble)/*filterTCLSideSlip(filterTCL(*/mAccel/*))*/;
   //oCar->_brakeCmd = (tdble)0.0; //filterABS(getBrake(targetspeed));
-  //CONTROL SPEED 
+  //CONTROL SPEED
   mSpeed = oCar->_speed_x;
   //CONTROL BRAKING
   oCar->ctrl.singleWheelBrakeMode = 1;
@@ -344,8 +344,8 @@ void TDriver::Drive()
     oCar->_brakeFRCmd = absOutput.brake_command[ABS_FR];
     oCar->_brakeRLCmd = absOutput.brake_command[ABS_RL];
     oCar->_brakeRRCmd = absOutput.brake_command[ABS_RR];
-  
-  } 
+
+  }
   if ( (strcmp(oCar->_trkPos.seg->name, "begin brake") == 0 || strcmp(oCar->_trkPos.seg->name, "straight 13") == 0 || begunBraking) && !endedBraking) {
 
     begunBraking = true;
@@ -367,7 +367,7 @@ void TDriver::Drive()
 
     if (begunBraking) {
 
-      //introduce braking incrementally 
+      //introduce braking incrementally
       float increaseRate = 0.42f; //0.16f
       float upperBrakeLimit = 0.8f;
       if (inputPressure + increaseRate <= upperBrakeLimit) {
@@ -377,7 +377,7 @@ void TDriver::Drive()
       }
 
     oCar->_accelCmd = (tdble)0.0;
-    oCar->_clutchCmd = (tdble) 0.0; 
+    oCar->_clutchCmd = (tdble) 0.0;
 
     AbsStepInput absInput = {};
     absInput.timestamp = static_cast<float>(num1time);
@@ -396,10 +396,10 @@ void TDriver::Drive()
     //absfile << "hello \n";
     const AbsConfig* absConfig = abs_get_config();
 
-    absfile << num1time << " " 
+    absfile << num1time << " "
 
            << mSpeed << " "
-           
+
            << absOutput.debug.vehicle_speed << " "
 
            << absOutput.debug.delta_time << " "
@@ -407,18 +407,18 @@ void TDriver::Drive()
            << absOutput.brake_command[0]   << " "
            << absOutput.brake_command[1]   << " "
            << absOutput.brake_command[2]   << " "
-           << absOutput.brake_command[3]   << " " 
+           << absOutput.brake_command[3]   << " "
 
            << absOutput.debug.wheel_spin_velocity[0] << " "
            << absOutput.debug.wheel_spin_velocity[1] << " "
            << absOutput.debug.wheel_spin_velocity[2] << " "
            << absOutput.debug.wheel_spin_velocity[3] << " "
-           
+
            << absOutput.debug.wheel_spin_acceleration[0] << " "
            << absOutput.debug.wheel_spin_acceleration[1] << " "
            << absOutput.debug.wheel_spin_acceleration[2] << " "
            << absOutput.debug.wheel_spin_acceleration[3] << " "
-           
+
            << absOutput.debug.wheel_slip_acceleration[0] << " "
            << absOutput.debug.wheel_slip_acceleration[1] << " "
            << absOutput.debug.wheel_slip_acceleration[2] << " "
@@ -432,12 +432,12 @@ void TDriver::Drive()
            << absOutput.debug.phase_states[0] << " "
            << absOutput.debug.phase_states[1] << " "
            << absOutput.debug.phase_states[2] << " "
-           << absOutput.debug.phase_states[3] << " "   
+           << absOutput.debug.phase_states[3] << " "
 
            << oCar->_wheelSlipOpt(0) << " "
            << oCar->_wheelSlipOpt(1) << " "
            << oCar->_wheelSlipOpt(2) << " "
-           << oCar->_wheelSlipOpt(3) << " "            
+           << oCar->_wheelSlipOpt(3) << " "
 
            << absConfig->min_vehicle_velocity_threshold << " "
            << absConfig->min_wheel_velocity_threshold   << " "
@@ -483,7 +483,7 @@ void TDriver::Drive()
 
            << "\n";
 
-           
+
            //#define _wheelFx(i)             priv.wheel[i].Fx
            //#define _wheelFy(i)             priv.wheel[i].Fy
            //#define _wheelFz(i)             priv.wheel[i].Fz
@@ -491,13 +491,13 @@ void TDriver::Drive()
 
     }
 
-    
+
   }
 
   //std::cout << "mass is: " << GfParmGetNum(oCar->_carHandle, SECT_CAR, PRM_MASS, NULL, 100.0) << std::endl;
 
   //std::cout << "engine tq: " << GfParmGetNum(oCar->_carHandle, SECT_ENGINE, PRM_TQ, NULL, 0.0) << std::endl;
-  
+
   //oCar->_enginerpmMaxTq << std::endl;
 
   //PRINT DEBUG INFO
@@ -590,11 +590,11 @@ double TDriver::getPitSpeed()
   double brakespeed;
   if (pitdist < 20.0) {
     brakespeed = 0.6 * brakeSpeed(pitdist, 0.0);
-    if (IS_CHARLIEROBOT_TORCS)
+    if (IS_ABSSPEEDDREAMSDRIVER_TORCS)
       brakespeed = 0.8 * brakeSpeed(pitdist, 0.0);
   } else {
     brakespeed = 0.6 * brakeSpeed(pitdist, 0.0);
-    if (IS_CHARLIEROBOT_TORCS)
+    if (IS_ABSSPEEDDREAMSDRIVER_TORCS)
       brakespeed = 0.8 * brakeSpeed(pitdist, 0.0);
   }
   maxspeed = MIN(maxspeed, brakespeed);
@@ -1900,7 +1900,7 @@ void TDriver::writeSectorSpeeds()
 {
   char dirname[256];
   sprintf(dirname, "%s/drivers/%s/%s/learned/",GetLocalDir() ,MyBotName, mCarType.c_str());
-#ifdef CHARLIEROBOT_TORCS
+#ifdef ABSSPEEDDREAMSDRIVER_TORCS
   if (GfCreateDir(strdup(dirname)) == GF_DIR_CREATED) {
 #else
   if (GfDirCreate(strdup(dirname)) == GF_DIR_CREATED) {

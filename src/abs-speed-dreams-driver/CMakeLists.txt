@@ -4,7 +4,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/ABS)
 
 set(CMAKE_CXX_STANDARD 17)
 
-SET(ROBOT_NAME "charlierobot")
+SET(ROBOT_NAME "absspeeddreamsdriver")
 
 SET(ROBOT_INTERFACE LEGACY WELCOME)
 
@@ -13,7 +13,7 @@ SET(ROBOT_SOURCES
     src/ClothoidPath.h
     src/cubic.cpp
     src/cubic.h
-    src/charlierobot.cpp
+    src/absspeeddreamsdriver.cpp
     src/danpath.cpp
     src/danpath.h
     src/driver.cpp
@@ -39,9 +39,9 @@ SET(ROBOT_SOURCES
     src/Vec3d.h
 )
 
-# Official-only charlierobot instances.
-# SET(ROBOT_CLONES charlierobot_36GP charlierobot_67GP charlierobot_lp1 charlierobot_ls1 charlierobot_ls2 charlierobot_mpa1
-#                  charlierobot_mpa11 charlierobot_mpa12 charlierobot_rs charlierobot_sc charlierobot_srw charlierobot_trb1)
+# Official-only absspeeddreamsdriver instances.
+# SET(ROBOT_CLONES absspeeddreamsdriver_36GP absspeeddreamsdriver_67GP absspeeddreamsdriver_lp1 absspeeddreamsdriver_ls1 absspeeddreamsdriver_ls2 absspeeddreamsdriver_mpa1
+#                  absspeeddreamsdriver_mpa11 absspeeddreamsdriver_mpa12 absspeeddreamsdriver_rs absspeeddreamsdriver_sc absspeeddreamsdriver_srw absspeeddreamsdriver_trb1)
 
 # The ubiquitous robot module and its clones.
 ROBOT_MODULE(NAME ${ROBOT_NAME} VERSION 2.0.0 SOVERSION 1.0.0
@@ -52,4 +52,4 @@ ROBOT_MODULE(NAME ${ROBOT_NAME} VERSION 2.0.0 SOVERSION 1.0.0
 target_link_libraries(${ROBOT_NAME} PRIVATE ABS)
 
 # For data associated to the ubiquitous robot module and its clones,
-# see data/drivers/charlierobot*/CMakeLists.txt
+# see data/drivers/absspeeddreamsdriver*/CMakeLists.txt

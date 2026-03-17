@@ -21,7 +21,7 @@
 
 #include "torcs_or_sd.h"
 
-#ifdef CHARLIEROBOT_TORCS
+#ifdef ABSSPEEDDREAMSDRIVER_TORCS
 #include <tmath/v2_t.h>
 #else
 #include <v2_t.h>
