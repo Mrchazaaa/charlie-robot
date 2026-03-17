@@ -34,10 +34,6 @@
 
 #define GRAVITY 9.81
 
-extern "C" {
-  #include "ABS.h"
-}
-
 TDriver::TDriver(int index)
 {
   mCarIndex = index;
@@ -96,6 +92,7 @@ TDriver::TDriver(int index)
   mSkillGlobal = 1.0;
   mSkillDriver = 1.0;
   mWatchdogCount = 0;
+  mAbsController = abs_create();
   initVars();
   setPrevVars();
 }
@@ -103,6 +100,7 @@ TDriver::TDriver(int index)
 
 TDriver::~TDriver()
 {
+  abs_destroy(mAbsController);
 }
 
 std::ofstream absfile;
@@ -214,10 +212,6 @@ void TDriver::InitTrack(PTrack Track, PCarHandle CarHandle, PCarSettings *CarPar
   mSkillDriver = MAX(0.95, 1.0 - 0.05 * driverskill);
 }
 
-float* brakeCMD[4];
-float* slipAccel[4];
-float* wheelSpinVelocity[4];
-
 void TDriver::NewRace(PtCarElt Car, PSituation Situation)
 {
   oCar = Car;
@@ -228,25 +222,11 @@ void TDriver::NewRace(PtCarElt Car, PSituation Situation)
 
   oCar->ctrl.singleWheelBrakeMode = 1;
 
-  brakeCMD[0] = &(oCar->_brakeFLCmd); //FL
-  brakeCMD[1] = &(oCar->_brakeFRCmd); //FR
-  brakeCMD[2] = &(oCar->_brakeRLCmd); //RL
-  brakeCMD[3] = &(oCar->_brakeRRCmd); //RR
-
-  slipAccel[0] = &(oCar->_wheelSlipAccel(1));
-  slipAccel[1] = &(oCar->_wheelSlipAccel(0));
-  slipAccel[2] = &(oCar->_wheelSlipAccel(3));
-  slipAccel[3] = &(oCar->_wheelSlipAccel(2));
-
   oCar->_brakeFRCmd = 0.0;
   oCar->_brakeFLCmd = 0.0;
   oCar->_brakeRRCmd = 0.0;
   oCar->_brakeRLCmd = 0.0;
-
-  wheelSpinVelocity[0] = &(oCar->_wheelSpinVel(1)); //FL
-  wheelSpinVelocity[1] = &(oCar->_wheelSpinVel(0)); //FR
-  wheelSpinVelocity[2] = &(oCar->_wheelSpinVel(3)); //RL
-  wheelSpinVelocity[3] = &(oCar->_wheelSpinVel(2)); //RR
+  abs_reset(mAbsController);
 
   //CHARLIE CODE :) CHARLIE CODE
 
@@ -351,7 +331,19 @@ void TDriver::Drive()
     //oCar->_brakeRRCmd = 0.0;
     //oCar->_brakeRLCmd = 0.0;
 
-    cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, num1time);
+    AbsStepInput absInput = {};
+    absInput.timestamp = static_cast<float>(num1time);
+    absInput.requested_pressure = inputPressure;
+    absInput.wheel_spin_velocity[ABS_FL] = oCar->_wheelSpinVel(1);
+    absInput.wheel_spin_velocity[ABS_FR] = oCar->_wheelSpinVel(0);
+    absInput.wheel_spin_velocity[ABS_RL] = oCar->_wheelSpinVel(3);
+    absInput.wheel_spin_velocity[ABS_RR] = oCar->_wheelSpinVel(2);
+    AbsStepOutput absOutput = {};
+    abs_step(mAbsController, &absInput, &absOutput);
+    oCar->_brakeFLCmd = absOutput.brake_command[ABS_FL];
+    oCar->_brakeFRCmd = absOutput.brake_command[ABS_FR];
+    oCar->_brakeRLCmd = absOutput.brake_command[ABS_RL];
+    oCar->_brakeRRCmd = absOutput.brake_command[ABS_RR];
   
   } 
   if ( (strcmp(oCar->_trkPos.seg->name, "begin brake") == 0 || strcmp(oCar->_trkPos.seg->name, "straight 13") == 0 || begunBraking) && !endedBraking) {
@@ -387,64 +379,77 @@ void TDriver::Drive()
     oCar->_accelCmd = (tdble)0.0;
     oCar->_clutchCmd = (tdble) 0.0; 
 
-    cycleABS( inputPressure, brakeCMD, wheelSpinVelocity, num1time);
+    AbsStepInput absInput = {};
+    absInput.timestamp = static_cast<float>(num1time);
+    absInput.requested_pressure = inputPressure;
+    absInput.wheel_spin_velocity[ABS_FL] = oCar->_wheelSpinVel(1);
+    absInput.wheel_spin_velocity[ABS_FR] = oCar->_wheelSpinVel(0);
+    absInput.wheel_spin_velocity[ABS_RL] = oCar->_wheelSpinVel(3);
+    absInput.wheel_spin_velocity[ABS_RR] = oCar->_wheelSpinVel(2);
+    AbsStepOutput absOutput = {};
+    abs_step(mAbsController, &absInput, &absOutput);
+    oCar->_brakeFLCmd = absOutput.brake_command[ABS_FL];
+    oCar->_brakeFRCmd = absOutput.brake_command[ABS_FR];
+    oCar->_brakeRLCmd = absOutput.brake_command[ABS_RL];
+    oCar->_brakeRRCmd = absOutput.brake_command[ABS_RR];
 
     //absfile << "hello \n";
+    const AbsConfig* absConfig = abs_get_config();
 
     absfile << num1time << " " 
 
            << mSpeed << " "
            
-           << getVehicleSpeed() << " "
+           << absOutput.debug.vehicle_speed << " "
 
-           << getDeltaTime() << " "
+           << absOutput.debug.delta_time << " "
 
-           << *brakeCMD[0]   << " "
-           << *brakeCMD[1]   << " "
-           << *brakeCMD[2]   << " "
-           << *brakeCMD[3]   << " " 
+           << absOutput.brake_command[0]   << " "
+           << absOutput.brake_command[1]   << " "
+           << absOutput.brake_command[2]   << " "
+           << absOutput.brake_command[3]   << " " 
 
-           << getWheelSpinVelocity(0) << " "
-           << getWheelSpinVelocity(1) << " "
-           << getWheelSpinVelocity(2) << " "
-           << getWheelSpinVelocity(3) << " "
+           << absOutput.debug.wheel_spin_velocity[0] << " "
+           << absOutput.debug.wheel_spin_velocity[1] << " "
+           << absOutput.debug.wheel_spin_velocity[2] << " "
+           << absOutput.debug.wheel_spin_velocity[3] << " "
            
-           << getWheelSpinAcceleration(0) << " "
-           << getWheelSpinAcceleration(1) << " "
-           << getWheelSpinAcceleration(2) << " "
-           << getWheelSpinAcceleration(3) << " "
+           << absOutput.debug.wheel_spin_acceleration[0] << " "
+           << absOutput.debug.wheel_spin_acceleration[1] << " "
+           << absOutput.debug.wheel_spin_acceleration[2] << " "
+           << absOutput.debug.wheel_spin_acceleration[3] << " "
            
-           << getWheelSlipAcceleration(0) << " "
-           << getWheelSlipAcceleration(1) << " "
-           << getWheelSlipAcceleration(2) << " "
-           << getWheelSlipAcceleration(3) << " "
+           << absOutput.debug.wheel_slip_acceleration[0] << " "
+           << absOutput.debug.wheel_slip_acceleration[1] << " "
+           << absOutput.debug.wheel_slip_acceleration[2] << " "
+           << absOutput.debug.wheel_slip_acceleration[3] << " "
 
-           << getWheelSlip(0) << " "
-           << getWheelSlip(1) << " "
-           << getWheelSlip(2) << " "
-           << getWheelSlip(3) << " "
+           << absOutput.debug.wheel_slip[0] << " "
+           << absOutput.debug.wheel_slip[1] << " "
+           << absOutput.debug.wheel_slip[2] << " "
+           << absOutput.debug.wheel_slip[3] << " "
 
-           << getPhaseStates(0) << " "
-           << getPhaseStates(1) << " "
-           << getPhaseStates(2) << " "
-           << getPhaseStates(3) << " "   
+           << absOutput.debug.phase_states[0] << " "
+           << absOutput.debug.phase_states[1] << " "
+           << absOutput.debug.phase_states[2] << " "
+           << absOutput.debug.phase_states[3] << " "   
 
            << oCar->_wheelSlipOpt(0) << " "
            << oCar->_wheelSlipOpt(1) << " "
            << oCar->_wheelSlipOpt(2) << " "
            << oCar->_wheelSlipOpt(3) << " "            
 
-           << TOSTRING(MIN_VEHICLE_VELOCITY_THRESHOLD) << " "
-           << TOSTRING(MIN_WHEEL_VELOCITY_THRESHOLD)   << " "
-           << TOSTRING(MIN_PRESSURE_THRESHOLD)         << " "
-           << TOSTRING(APPLY_DELAY)                    << " "
-           << TOSTRING(PRIMARY_APPLY_RATE)             << " "
-           << TOSTRING(SECONDARY_APPLY_RATE)           << " "
-           << TOSTRING(RELEASE_RATE)                   << " "
-           << TOSTRING(MIN_WHEEL_SPIN_ACCELERATION)    << " "
-           << TOSTRING(MAX_WHEEL_SPIN_ACCELERATION)    << " "
-           << TOSTRING(MAX_WHEEL_SLIP)                 << " "
-           << TOSTRING(MAX_BRAKE_PRESSURE)             << " "
+           << absConfig->min_vehicle_velocity_threshold << " "
+           << absConfig->min_wheel_velocity_threshold   << " "
+           << absConfig->min_pressure_threshold         << " "
+           << absConfig->apply_delay                    << " "
+           << absConfig->primary_apply_rate             << " "
+           << absConfig->secondary_apply_rate           << " "
+           << absConfig->release_rate                   << " "
+           << absConfig->min_wheel_spin_acceleration    << " "
+           << absConfig->max_wheel_spin_acceleration    << " "
+           << absConfig->initial_max_wheel_slip         << " "
+           << absConfig->max_brake_pressure             << " "
 
            << oCar->_wheelSlipNorm(0) << " "
            << oCar->_wheelSlipNorm(1) << " "

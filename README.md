@@ -17,11 +17,13 @@ Whilst building from source on a Linux machine, I've found the following guide w
 You might run into errors concerning missing header files for the PLIB Library, the installation of which is outlined helpfully at http://www.berniw.org/tutorials/robot/torcs/install/plib-install.html as part of a wider guide outlining driver creation for TORCS (a driving simulator from which Speed Dreams descended).
 
 ## Installing Charlie Robot
-1. Copy <strong>{CHARLIE-ROBOT-DIR}/src/charlie-robot</strong> into <strong>{SPEED-DREAMS-DIR}/src/drivers</strong>
-2. In <strong>{SPEED-DREAMS-DIR}/src/drivers/CMakeLists.txt</strong> add <strong>"SD_ADD_SUBDIRECTORY(charlie-robot)"</strong>
-3. Copy <strong>{CHARLIE-ROBOT-DIR}/data/charlierobot</strong> into <strong>{SPEED-DREAMS-DIR}/data/drivers</strong>
-4. In <strong>{SPEED-DREAMS-DIR}/data/CMakeLists.txt</strong> add <strong>"SD_ADD_SUBDIRECTORY(charlierobot)"</strong>
-3. cd "speed-dreams/build" run "cmake .." and then "make" (possibly followed by "make install").
+1. Clone this repository with submodules: <strong>`git clone --recurse-submodules ...`</strong> or, in an existing checkout, run <strong>`git submodule sync --recursive && git submodule update --init --recursive`</strong>.
+2. Copy <strong>{CHARLIE-ROBOT-DIR}/src/charlie-robot</strong> into <strong>{SPEED-DREAMS-DIR}/src/drivers</strong>.
+3. Copy <strong>{CHARLIE-ROBOT-DIR}/src/charlie-robot/src/third_party/ABS</strong> into <strong>{SPEED-DREAMS-DIR}/src/drivers/charlie-robot/src/third_party</strong>.
+4. In <strong>{SPEED-DREAMS-DIR}/src/drivers/CMakeLists.txt</strong> add <strong>"SD_ADD_SUBDIRECTORY(charlie-robot)"</strong>.
+5. Copy <strong>{CHARLIE-ROBOT-DIR}/data/charlierobot</strong> into <strong>{SPEED-DREAMS-DIR}/data/drivers</strong>.
+6. In <strong>{SPEED-DREAMS-DIR}/data/CMakeLists.txt</strong> add <strong>"SD_ADD_SUBDIRECTORY(charlierobot)"</strong>.
+7. cd "speed-dreams/build" run "cmake .." and then "make" (possibly followed by "make install").
 
 ## Basic Usage
 Once CharlieRobot is installed: 

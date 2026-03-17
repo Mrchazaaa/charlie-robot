@@ -1,9 +1,6 @@
 INCLUDE(../../../cmake/macros.cmake)
 
-#include_directories(src/include)
-include_directories(src/include/TinyEKF/src)
-include_directories(src/include/autodiff)
-include_directories(src/include/eigen-git-mirror)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/ABS)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -11,7 +8,7 @@ SET(ROBOT_NAME "charlierobot")
 
 SET(ROBOT_INTERFACE LEGACY WELCOME)
 
-SET(ROBOT_SOURCES 
+SET(ROBOT_SOURCES
     src/ClothoidPath.cpp
     src/ClothoidPath.h
     src/cubic.cpp
@@ -40,18 +37,6 @@ SET(ROBOT_SOURCES
     src/Utils.h
     src/Vec2d.h
     src/Vec3d.h
-    src/ABS.c
-    src/ABS.h
-    src/velocity_EKF.cpp
-    src/velocity_EKF.h
-    src/include/TinyEKF/src/tiny_ekf.c
-    src/include/TinyEKF/src/tiny_ekf.h
-    src/tinyekf_config.h
-    #src/tiny_ekf.c
-    #src/tiny_ekf.h
-    src/include/TinyEKF/src/tiny_ekf_struct.h
-    src/include/eigen-git-mirror/Eigen/LU
-    src/include/eigen-git-mirror/Eigen/Core
 )
 
 # Official-only charlierobot instances.
@@ -63,6 +48,8 @@ ROBOT_MODULE(NAME ${ROBOT_NAME} VERSION 2.0.0 SOVERSION 1.0.0
              INTERFACE ${ROBOT_INTERFACE}
              SOURCES ${ROBOT_SOURCES}
              CLONENAMES ${ROBOT_CLONES})
+
+target_link_libraries(${ROBOT_NAME} PRIVATE ABS)
 
 # For data associated to the ubiquitous robot module and its clones,
 # see data/drivers/charlierobot*/CMakeLists.txt

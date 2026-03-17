@@ -22,6 +22,7 @@
 #include "globaldefinitions.h"
 
 #include <fstream>
+#include "ABS/abs.h"
 #include "opponent.h"
 #include "pit.h"
 #include "danpath.h"
@@ -294,6 +295,7 @@ class TDriver {
   PidController mSpeedController;
   PidController mAttackAngleController;
   int mWatchdogCount;
+  AbsController* mAbsController;
   // Data that should stay constant after first initialization
   double mBRAKEPRESS;
   double mBRAKEREPARTITION;
